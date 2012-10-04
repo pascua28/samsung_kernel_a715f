@@ -1367,6 +1367,10 @@ struct task_struct {
 	unsigned int			sequential_io;
 	unsigned int			sequential_io_avg;
 #endif
+#ifdef CONFIG_PREEMPT_RT_BASE
+	int				softirq_nestcnt;
+	unsigned int			softirqs_raised;
+#endif
 #ifdef CONFIG_DEBUG_ATOMIC_SLEEP
 	unsigned long			task_state_change;
 #endif
@@ -1586,6 +1590,7 @@ extern struct pid *cad_pid;
 /*
  * Per process flags
  */
+#define PF_IN_SOFTIRQ		0x00000001      /* Task is serving softirq */
 #define PF_IDLE			0x00000002	/* I am an IDLE thread */
 #define PF_EXITING		0x00000004	/* Getting shut down */
 #define PF_VCPU			0x00000010	/* I'm a virtual CPU */
