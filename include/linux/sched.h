@@ -1391,6 +1391,9 @@ struct task_struct {
 #ifdef CONFIG_FIVE
 	struct task_integrity *integrity;
 #endif
+#ifdef CONFIG_PREEMPT_RT_FULL
+	int				xmit_recursion;
+#endif
 	int				pagefault_disabled;
 #ifdef CONFIG_MMU
 	struct task_struct		*oom_reaper_list;
