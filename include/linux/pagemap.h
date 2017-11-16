@@ -155,7 +155,7 @@ static inline int mapping_sensitive(struct address_space *mapping)
 }
 #endif
 
-void release_pages(struct page **pages, int nr, bool cold);
+void release_pages(struct page **pages, int nr);
 
 /*
  * speculatively take a reference to a page.
