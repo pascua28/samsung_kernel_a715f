@@ -153,7 +153,8 @@ static inline bool is_ttbr1_addr(unsigned long addr)
 void show_pte(unsigned long addr)
 {
 	struct mm_struct *mm;
-	pgd_t *pgd;
+	pgd_t *pgdp;
+	pgd_t pgd;
 
 	if (is_ttbr0_addr(addr)) {
 		/* TTBR0 */
@@ -175,7 +176,7 @@ void show_pte(unsigned long addr)
 		return;
 	}
 
-	pr_alert("%s pgtable: %luk pages, %u-bit VAs, pgd = %p\n",
+	pr_alert("%s pgtable: %luk pages, %u-bit VAs, pgdp = %p\n",
 		 mm == &init_mm ? "swapper" : "user", PAGE_SIZE / SZ_1K,
 		 VA_BITS, mm->pgd);
 
@@ -183,8 +184,9 @@ void show_pte(unsigned long addr)
 	sec_debug_store_pte((unsigned long)mm->pgd, 0);
 #endif
 
-	pgd = pgd_offset(mm, addr);
-	pr_alert("[%016lx] *pgd=%016llx", addr, pgd_val(*pgd));
+	pgdp = pgd_offset(mm, addr);
+	pgd = READ_ONCE(*pgdp);
+	pr_alert("[%016lx] pgd=%016llx", addr, pgd_val(pgd));
 
 #ifdef CONFIG_SEC_USER_RESET_DEBUG
 	sec_debug_store_pte((unsigned long)addr, 1);
@@ -192,41 +194,44 @@ void show_pte(unsigned long addr)
 #endif
 
 	do {
-		pud_t *pud;
-		pmd_t *pmd;
-		pte_t *pte;
+		pud_t *pudp, pud;
+		pmd_t *pmdp, pmd;
+		pte_t *ptep, pte;
 
-		if (pgd_none(*pgd) || pgd_bad(*pgd))
+		if (pgd_none(pgd) || pgd_bad(pgd))
 			break;
 
-		pud = pud_offset(pgd, addr);
-		pr_cont(", *pud=%016llx", pud_val(*pud));
+		pudp = pud_offset(pgdp, addr);
+		pud = READ_ONCE(*pudp);
+		pr_cont(", pud=%016llx", pud_val(pud));
 
 #ifdef CONFIG_SEC_USER_RESET_DEBUG
 		sec_debug_store_pte((unsigned long)pud_val(*pud), 3);
 #endif
 
-		if (pud_none(*pud) || pud_bad(*pud))
+		if (pud_none(pud) || pud_bad(pud))
 			break;
 
-		pmd = pmd_offset(pud, addr);
-		pr_cont(", *pmd=%016llx", pmd_val(*pmd));
+		pmdp = pmd_offset(pudp, addr);
+		pmd = READ_ONCE(*pmdp);
+		pr_cont(", pmd=%016llx", pmd_val(pmd));
 
 #ifdef CONFIG_SEC_USER_RESET_DEBUG
 		sec_debug_store_pte((unsigned long)pmd_val(*pmd), 4);
 #endif
 
-		if (pmd_none(*pmd) || pmd_bad(*pmd))
+		if (pmd_none(pmd) || pmd_bad(pmd))
 			break;
 
-		pte = pte_offset_map(pmd, addr);
-		pr_cont(", *pte=%016llx", pte_val(*pte));
+		ptep = pte_offset_map(pmdp, addr);
+		pte = READ_ONCE(*ptep);
+		pr_cont(", pte=%016llx", pte_val(pte));
 
 #ifdef CONFIG_SEC_USER_RESET_DEBUG
 		sec_debug_store_pte((unsigned long)pte_val(*pte), 5);
 #endif
 
-		pte_unmap(pte);
+		pte_unmap(ptep);
 	} while(0);
 
 	pr_cont("\n");
@@ -247,8 +252,9 @@ int ptep_set_access_flags(struct vm_area_struct *vma,
 			  pte_t entry, int dirty)
 {
 	pteval_t old_pteval, pteval;
+	pte_t pte = READ_ONCE(*ptep);
 
-	if (pte_same(*ptep, entry))
+	if (pte_same(pte, entry))
 		return 0;
 
 	/* only preserve the access flags and write permission */
@@ -261,7 +267,7 @@ int ptep_set_access_flags(struct vm_area_struct *vma,
 	 * (calculated as: a & b == ~(~a | ~b)).
 	 */
 	pte_val(entry) ^= PTE_RDONLY;
-	pteval = READ_ONCE(pte_val(*ptep));
+	pteval = pte_val(pte);
 	do {
 		old_pteval = pteval;
 		pteval ^= PTE_RDONLY;
