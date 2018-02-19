@@ -6,8 +6,11 @@
 
 #define __LSE_PREAMBLE	".arch_extension lse\n"
 
+#include <linux/compiler_types.h>
+#include <linux/export.h>
 #include <linux/stringify.h>
 #include <asm/alternative.h>
+#include <asm/cpucaps.h>
 
 #ifdef __ASSEMBLER__
 
