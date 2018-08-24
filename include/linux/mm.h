@@ -707,10 +707,10 @@ static inline pte_t maybe_mkwrite(pte_t pte, unsigned long vma_flags)
 	return pte;
 }
 
-int alloc_set_pte(struct vm_fault *vmf, struct mem_cgroup *memcg,
+vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct mem_cgroup *memcg,
 		struct page *page);
-int finish_fault(struct vm_fault *vmf);
-int finish_mkwrite_fault(struct vm_fault *vmf);
+vm_fault_t finish_fault(struct vm_fault *vmf);
+vm_fault_t finish_mkwrite_fault(struct vm_fault *vmf);
 #endif
 
 /*
@@ -1467,7 +1467,7 @@ int generic_error_remove_page(struct address_space *mapping, struct page *page);
 int invalidate_inode_page(struct page *page);
 
 #ifdef CONFIG_MMU
-extern int handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+extern vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
 		unsigned int flags);
 
 #ifdef CONFIG_SPECULATIVE_PAGE_FAULT
@@ -1510,7 +1510,7 @@ extern int fixup_user_fault(struct task_struct *tsk, struct mm_struct *mm,
 			    unsigned long address, unsigned int fault_flags,
 			    bool *unlocked);
 #else
-static inline int handle_mm_fault(struct vm_area_struct *vma,
+static inline vm_fault_t handle_mm_fault(struct vm_area_struct *vma,
 		unsigned long address, unsigned int flags)
 {
 	/* should never happen if there's no MMU */
@@ -2633,7 +2633,7 @@ static inline struct page *follow_page(struct vm_area_struct *vma,
 #define FOLL_COW	0x4000	/* internal GUP flag */
 #define FOLL_ANON	0x8000	/* don't do file mappings */
 
-static inline int vm_fault_to_errno(int vm_fault, int foll_flags)
+static inline int vm_fault_to_errno(vm_fault_t vm_fault, int foll_flags)
 {
 	if (vm_fault & VM_FAULT_OOM)
 		return -ENOMEM;

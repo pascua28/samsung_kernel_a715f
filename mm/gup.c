@@ -502,7 +502,7 @@ static int faultin_page(struct task_struct *tsk, struct vm_area_struct *vma,
 		unsigned long address, unsigned int *flags, int *nonblocking)
 {
 	unsigned int fault_flags = 0;
-	int ret;
+	vm_fault_t ret;
 
 	/* mlock all present pages, but do not fault in new pages */
 	if ((*flags & (FOLL_POPULATE | FOLL_MLOCK)) == FOLL_MLOCK)
@@ -831,7 +831,7 @@ int fixup_user_fault(struct task_struct *tsk, struct mm_struct *mm,
 		     bool *unlocked)
 {
 	struct vm_area_struct *vma;
-	int ret, major = 0;
+	vm_fault_t ret, major = 0;
 
 	address = untagged_addr(address);
 
