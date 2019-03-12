@@ -36,6 +36,15 @@
 
 static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long addr)
 {
+struct page *page;
+
+	page = alloc_page(PGALLOC_GFP);
+	if (!page)
+		return NULL;
+	if (!pgtable_pmd_page_ctor(page)) {
+		__free_page(page);
+		return NULL;
+	}
 #ifdef CONFIG_UH_RKP
 	/* FIXME not zeroing the page */
 	pmd_t *rkp_ropage = NULL;
@@ -44,7 +53,7 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long addr)
 		return rkp_ropage;
 	else
 #endif
-	return (pmd_t *)__get_free_page(PGALLOC_GFP);
+	return page_address(page);
 }
 
 static inline void pmd_free(struct mm_struct *mm, pmd_t *pmdp)
@@ -55,6 +64,7 @@ static inline void pmd_free(struct mm_struct *mm, pmd_t *pmdp)
 		rkp_ro_free((void *)pmd);
 	else
 #endif
+	pgtable_pmd_page_dtor(virt_to_page(pmdp));
 	free_page((unsigned long)pmdp);
 }
 

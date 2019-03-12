@@ -66,12 +66,14 @@ static inline void __pte_free_tlb(struct mmu_gather *tlb, pgtable_t pte,
 static inline void __pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmdp,
 				  unsigned long addr)
 {
+	struct page *page = virt_to_page(pmdp);
 #ifdef CONFIG_UH_RKP
 	if (is_rkp_ro_page((unsigned long)pmdp)) {
 		rkp_ro_free((void *)pmdp);
 	} else
 #endif
-	tlb_remove_table(tlb, virt_to_page(pmdp));
+	pgtable_pmd_page_dtor(page);
+	tlb_remove_table(tlb, page);
 }
 #endif
 
