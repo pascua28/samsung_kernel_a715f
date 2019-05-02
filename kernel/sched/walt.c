@@ -2057,6 +2057,18 @@ void mark_task_starting(struct task_struct *p)
 	update_task_cpu_cycles(p, cpu_of(rq), wallclock);
 }
 
+#define pct_to_min_scaled(tunable) \
+		div64_u64(((u64)sched_ravg_window * tunable) << 10, \
+			   (u64)sched_cluster[0]->load_scale_factor)
+
+static inline void walt_update_group_thresholds(void)
+{
+	sched_group_upmigrate =
+			pct_to_min_scaled(sysctl_sched_group_upmigrate_pct);
+	sched_group_downmigrate =
+			pct_to_min_scaled(sysctl_sched_group_downmigrate_pct);
+}
+
 static cpumask_t all_cluster_cpus = CPU_MASK_NONE;
 DECLARE_BITMAP(all_cluster_ids, NR_CPUS);
 struct sched_cluster *sched_cluster[NR_CPUS];
@@ -2250,6 +2262,7 @@ static void update_all_clusters_stats(void)
 
 	max_possible_capacity = highest_mpc;
 	min_max_possible_capacity = lowest_mpc;
+	walt_update_group_thresholds();
 
 	__update_min_max_capacity();
 	release_rq_locks_irqrestore(cpu_possible_mask, &flags);
@@ -2514,8 +2527,6 @@ struct sched_cluster *best_cluster(struct related_thread_group *grp,
 	else
 		threshold = sched_group_upmigrate;
 
-	demand = scale_load_to_cpu(demand, cluster_first_cpu(cluster));
-
 	if (demand >= threshold)
 		cluster = sched_cluster[1];
 
@@ -2608,9 +2619,6 @@ int update_preferred_cluster(struct related_thread_group *grp,
 
 	return 0;
 }
-
-#define pct_to_real(tunable)	\
-		(div64_u64((u64)tunable * (u64)max_task_load(), 100))
 
 #define ADD_TASK	0
 #define REM_TASK	1
@@ -2864,6 +2872,8 @@ void update_cpu_cluster_capacity(const cpumask_t *cpus)
 	}
 
 	__update_min_max_capacity();
+	if (cpumask_intersects(cpus, &sched_cluster[0]->cpus))
+		walt_update_group_thresholds();
 
 	release_rq_locks_irqrestore(cpu_possible_mask, &flags);
 }
@@ -3271,13 +3281,14 @@ unsigned int walt_get_default_coloc_group_load(void)
 			(u64)sched_ravg_window * scale);
 }
 
-int walt_proc_update_handler(struct ctl_table *table, int write,
-			     void __user *buffer, size_t *lenp,
-			     loff_t *ppos)
+int walt_proc_group_thresholds_handler(struct ctl_table *table, int write,
+				       void __user *buffer, size_t *lenp,
+				       loff_t *ppos)
 {
 	int ret;
-	unsigned int *data = (unsigned int *)table->data;
 	static DEFINE_MUTEX(mutex);
+	struct rq *rq = cpu_rq(cpumask_first(cpu_possible_mask));
+	unsigned long flags;
 
 	mutex_lock(&mutex);
 	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
@@ -3286,14 +3297,16 @@ int walt_proc_update_handler(struct ctl_table *table, int write,
 		return ret;
 	}
 
-	if (data == &sysctl_sched_group_upmigrate_pct)
-		sched_group_upmigrate =
-			pct_to_real(sysctl_sched_group_upmigrate_pct);
-	else if (data == &sysctl_sched_group_downmigrate_pct)
-		sched_group_downmigrate =
-			pct_to_real(sysctl_sched_group_downmigrate_pct);
-	else
-		ret = -EINVAL;
+	/*
+	 * The load scale factor update happens with all
+	 * rqs locked. so acquiring 1 CPU rq lock and
+	 * updating the thresholds is sufficient for
+	 * an atomic update.
+	 */
+	raw_spin_lock_irqsave(&rq->lock, flags);
+	walt_update_group_thresholds();
+	raw_spin_unlock_irqrestore(&rq->lock, flags);
+
 	mutex_unlock(&mutex);
 
 	return ret;
