@@ -631,7 +631,6 @@ do {									\
 #endif
 #ifdef CONFIG_SCHED_WALT
 	P(cluster->load_scale_factor);
-	P(cluster->capacity);
 	P(cluster->max_possible_capacity);
 	P(cluster->efficiency);
 	P(cluster->cur_freq);
@@ -720,8 +719,6 @@ static void sched_debug_header(struct seq_file *m)
 	P(sysctl_sched_child_runs_first);
 #ifdef CONFIG_SCHED_WALT
 	P(sched_init_task_load_windows);
-	P(min_capacity);
-	P(max_capacity);
 	P(sched_ravg_window);
 	P(sched_load_granule);
 #endif
