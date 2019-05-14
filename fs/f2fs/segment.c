@@ -1732,7 +1732,8 @@ static int issue_discard_thread(void *data)
 				kthread_should_stop() || freezing(current) ||
 				!wait_ms ||
 				dcc->discard_wake,
-				msecs_to_jiffies(wait_ms));
+				msecs_to_jiffies((sbi->gc_mode == GC_URGENT) ?
+						 1 : wait_ms));
 
 		if (dcc->discard_wake)
 			dcc->discard_wake = 0;
