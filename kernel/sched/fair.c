@@ -4457,6 +4457,7 @@ entity_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr, int queued)
 		check_preempt_tick(cfs_rq, curr);
 }
 
+#define fits_capacity(cap, max)	((cap) * capacity_margin < (max) * 1024)
 
 /**************************************************
  * CFS bandwidth control machinery
