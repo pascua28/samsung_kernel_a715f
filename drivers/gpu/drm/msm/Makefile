@@ -241,3 +241,4 @@ else
 obj-y += samsung/
 endif
 
+CFLAGS_sde_crtc.o += -Wframe-larger-than=8192
