@@ -36,7 +36,6 @@
 #include <linux/cpu_pm.h>
 #include <linux/cpuhotplug.h>
 #include <linux/sched/clock.h>
-#include <linux/sched/stat.h>
 #include <soc/qcom/pm.h>
 #include <soc/qcom/event_timer.h>
 #include <soc/qcom/lpm_levels.h>
@@ -326,21 +325,6 @@ static void biastimer_start(uint32_t time_ns)
 
 static inline bool is_cpu_biased(int cpu, uint64_t *bias_time)
 {
-	u64 now = sched_clock();
-	u64 last = sched_get_cpu_last_busy_time(cpu);
-	u64 diff = 0;
-	int hyst_bias = pm_qos_request(PM_QOS_HIST_BIAS);
-
-	if (!last)
-		return false;
-
-	diff = now - last;
-
-	if (diff < max(BIAS_HYST, hyst_bias * NSEC_PER_MSEC)) {
-		*bias_time = max(BIAS_HYST, hyst_bias * NSEC_PER_MSEC) - diff;
-		return true;
-	}
-
 	return false;
 }
 
