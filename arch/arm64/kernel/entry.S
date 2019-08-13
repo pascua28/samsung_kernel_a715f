@@ -672,7 +672,8 @@ el1_irq:
 
 #ifdef CONFIG_PREEMPT
 	ldr	x24, [tsk, #TSK_TI_PREEMPT]	 // get preempt count
-	cbnz	x24, 2f				 // preempt count != 0
+	cbz	x24, 1f				 // (need_resched + count) == 0
+	cbnz	w24, 2f				 // count != 0
 
 	ldr	w24, [tsk, #TSK_TI_PREEMPT_LAZY] // get preempt lazy count
 	cbnz	w24, 2f				 // preempt lazy count != 0
