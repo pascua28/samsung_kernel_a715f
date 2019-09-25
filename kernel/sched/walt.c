@@ -1063,7 +1063,6 @@ static inline int busy_to_bucket(u32 normalized_rt)
 /*
  * get_pred_busy - calculate predicted demand for a task on runqueue
  *
- * @rq: runqueue of task p
  * @p: task whose prediction is being updated
  * @start: starting bucket. returned prediction should not be lower than
  *         this bucket.
@@ -1079,7 +1078,7 @@ static inline int busy_to_bucket(u32 normalized_rt)
  * time and returns the latest that falls into the bucket. If no such busy
  * time exists, it returns the medium of that bucket.
  */
-static u32 get_pred_busy(struct rq *rq, struct task_struct *p,
+static u32 get_pred_busy(struct task_struct *p,
 				int start, u32 runtime)
 {
 	int i;
@@ -1139,12 +1138,12 @@ out:
 	return ret;
 }
 
-static inline u32 calc_pred_demand(struct rq *rq, struct task_struct *p)
+static inline u32 calc_pred_demand(struct task_struct *p)
 {
 	if (p->ravg.pred_demand >= p->ravg.curr_window)
 		return p->ravg.pred_demand;
 
-	return get_pred_busy(rq, p, busy_to_bucket(p->ravg.curr_window),
+	return get_pred_busy(p, busy_to_bucket(p->ravg.curr_window),
 			     p->ravg.curr_window);
 }
 
@@ -1179,7 +1178,7 @@ void update_task_pred_demand(struct rq *rq, struct task_struct *p, int event)
 			return;
 	}
 
-	new = calc_pred_demand(rq, p);
+	new = calc_pred_demand(p);
 	old = p->ravg.pred_demand;
 
 	if (old >= new)
@@ -1705,7 +1704,7 @@ done:
 }
 
 
-static inline u32 predict_and_update_buckets(struct rq *rq,
+static inline u32 predict_and_update_buckets(
 			struct task_struct *p, u32 runtime) {
 
 	int bidx;
@@ -1715,7 +1714,7 @@ static inline u32 predict_and_update_buckets(struct rq *rq,
 		return 0;
 
 	bidx = busy_to_bucket(runtime);
-	pred_demand = get_pred_busy(rq, p, bidx, runtime);
+	pred_demand = get_pred_busy(p, bidx, runtime);
 	bucket_increase(p->ravg.busy_buckets, bidx);
 
 	return pred_demand;
@@ -1813,7 +1812,7 @@ static void update_history(struct rq *rq, struct task_struct *p,
 		else
 			demand = max(avg, runtime);
 	}
-	pred_demand = predict_and_update_buckets(rq, p, runtime);
+	pred_demand = predict_and_update_buckets(p, runtime);
 	demand_scaled = scale_demand(demand);
 	pred_demand_scaled = scale_demand(pred_demand);
 
