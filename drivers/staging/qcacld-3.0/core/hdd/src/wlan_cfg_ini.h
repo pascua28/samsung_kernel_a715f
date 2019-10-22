@@ -127,6 +127,7 @@ static const char wlan_cfg[] __initconst = {
 	"adapt_dwell_lpf_weight=80\n"
 	"adapt_dwell_wifi_act_threshold=10\n"
 	"gEnablePacketLog=0\n"
+	"gForce1x1Exception=1\n"
 	"MAWCEnabled=0\n"
 	"enable_rtt_mac_randomization=1\n"
 	"gEnableConcurrentSTA=wlan1\n"
