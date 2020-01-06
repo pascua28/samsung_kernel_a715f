@@ -2067,6 +2067,8 @@ update_task_rq_cpu_cycles(struct task_struct *p, struct rq *rq, int event,
 		rq->task_exec_scale = DIV64_U64_ROUNDUP(cycles_delta *
 				topology_get_cpu_scale(NULL, cpu),
 				time_delta * rq->cluster->max_possible_freq);
+		trace_sched_get_task_cpu_cycles(cpu, event,
+				cycles_delta, time_delta, p);
 	}
 
 	p->cpu_cycles = cur_cycles;
