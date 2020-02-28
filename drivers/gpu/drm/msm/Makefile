@@ -11,6 +11,8 @@ ccflags-$(CONFIG_DRM_SDE_SHP) += -Idrivers/gpu/drm/msm/shp
 
 ccflags-$(CONFIG_DISPLAY_SAMSUNG) += -Idrivers/gpu/drm/msm/samsung
 
+ccflags-y += -O3
+
 ifeq ($(CONFIG_DISPLAY_SAMSUNG_LEGO),y)
 ccflags-y += -I$(srctree)/include/drm
 ccflags-y += -I$(srctree)/drivers/gpu/drm/msm
