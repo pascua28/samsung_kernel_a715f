@@ -111,13 +111,13 @@ TRACE_EVENT(cpu_idle_enter,
 
 TRACE_EVENT(cpu_idle_exit,
 
-	TP_PROTO(int index, bool success),
+	TP_PROTO(int index, int success),
 
 	TP_ARGS(index, success),
 
 	TP_STRUCT__entry(
 		__field(int, index)
-		__field(bool, success)
+		__field(int, success)
 	),
 
 	TP_fast_assign(
