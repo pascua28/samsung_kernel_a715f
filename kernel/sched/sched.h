@@ -58,6 +58,8 @@ extern unsigned int sched_capacity_margin_down[NR_CPUS];
 extern unsigned int sched_capacity_margin_up_boosted[NR_CPUS];
 extern unsigned int sched_capacity_margin_down_boosted[NR_CPUS];
 
+extern struct cpumask min_cap_cpu_mask;
+
 #ifdef CONFIG_SCHED_WALT
 extern unsigned int sched_ravg_window;
 extern unsigned int walt_cpu_util_freq_divisor;
