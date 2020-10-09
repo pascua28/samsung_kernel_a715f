@@ -1793,7 +1793,7 @@ static void default_options(struct f2fs_sb_info *sbi, bool remount)
 	F2FS_OPTION(sbi).compress_algorithm = COMPRESS_LZ4;
 	F2FS_OPTION(sbi).compress_log_size = MIN_COMPRESS_LOG_SIZE;
 	F2FS_OPTION(sbi).compress_ext_cnt = 0;
-	F2FS_OPTION(sbi).bggc_mode = BGGC_MODE_ON;
+	F2FS_OPTION(sbi).bggc_mode = BGGC_MODE_OFF;
 	F2FS_OPTION(sbi).flush_group = make_kgid(&init_user_ns, F2FS_DEF_RESGID);
 
 	set_opt(sbi, INLINE_XATTR);
