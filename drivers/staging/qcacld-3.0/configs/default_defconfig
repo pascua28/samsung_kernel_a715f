@@ -901,6 +901,9 @@ CONFIG_FEATURE_HTC_CREDIT_HISTORY := n
 #Flag to enable MTRACE feature
 CONFIG_TRACE_RECORD_FEATURE := n
 
+#Flag to enable roam debug log
+CONFIG_FEATURE_ROAM_DEBUG := n
+
 #Flag to enable DFS Master feature
 CONFIG_WLAN_DFS_MASTER_ENABLE := y
 
