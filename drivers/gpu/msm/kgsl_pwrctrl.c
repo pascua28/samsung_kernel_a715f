@@ -1118,6 +1118,8 @@ static ssize_t __force_on_store(struct device *dev,
 	if (device == NULL)
 		return 0;
 
+	return count;
+
 	ret = kgsl_sysfs_store(buf, &val);
 	if (ret)
 		return ret;
