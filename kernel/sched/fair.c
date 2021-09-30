@@ -11361,6 +11361,12 @@ no_move:
 
 			raw_spin_lock_irqsave(&busiest->lock, flags);
 
+			if (is_reserved(this_cpu) ||
+				is_reserved(cpu_of(busiest))) {
+				raw_spin_unlock_irqrestore(&busiest->lock, flags);
+				*continue_balancing = 0;
+				goto out;
+			}
 			/*
 			 * The CPUs are marked as reserved if tasks
 			 * are pushed/pulled from other CPUs. In that case,

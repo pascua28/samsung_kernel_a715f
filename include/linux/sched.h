@@ -1178,6 +1178,9 @@ struct task_struct {
 	struct mutex			futex_exit_mutex;
 	unsigned int			futex_state;
 #endif
+#ifdef CONFIG_SPRD_ROTATION_TASK
+	u64 last_enqueue_ts;
+#endif
 #ifdef CONFIG_PERF_EVENTS
 	struct perf_event_context	*perf_event_ctxp[perf_nr_task_contexts];
 	struct mutex			perf_event_mutex;
