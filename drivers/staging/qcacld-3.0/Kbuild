@@ -757,7 +757,9 @@ WLAN_LOGGING_INC     := -I$(WLAN_ROOT)/$(WLAN_LOGGING_INC_DIR)
 WLAN_LOGGING_OBJS    := $(WLAN_LOGGING_SRC_DIR)/wlan_logging_sock_svc.o \
 		$(WLAN_LOGGING_SRC_DIR)/wlan_roam_debug.o
 
+ifeq ($(BUILD_DEBUG_VERSION), 1)
 $(call add-wlan-objs,wlan_logging,$(WLAN_LOGGING_OBJS))
+endif
 
 ############ SYS ############
 SYS_DIR :=	core/mac/src/sys
