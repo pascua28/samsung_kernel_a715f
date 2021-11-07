@@ -3304,7 +3304,9 @@ static void console_unregister(struct uart_driver *drv)
 static void msm_geni_serial_debug_init(struct uart_port *uport, bool console)
 {
 	struct msm_geni_serial_port *msm_port = GET_DEV_PORT(uport);
+#ifdef CONFIG_IPC_LOGGING
 	char name[30];
+#endif
 
 #ifdef CONFIG_DEBUG_FS
 	msm_port->dbg = debugfs_create_dir(dev_name(uport->dev), NULL);
@@ -3312,6 +3314,7 @@ static void msm_geni_serial_debug_init(struct uart_port *uport, bool console)
 		dev_err(uport->dev, "Failed to create dbg dir\n");
 #endif
 
+#ifdef CONFIG_IPC_LOGGING
 	if (!console) {
 		memset(name, 0, sizeof(name));
 		if (!msm_port->ipc_log_rx) {
@@ -3360,6 +3363,7 @@ static void msm_geni_serial_debug_init(struct uart_port *uport, bool console)
 				dev_info(uport->dev, "Err in Misc IPC Log\n");
 		}
 	}
+#endif
 }
 #endif
 
