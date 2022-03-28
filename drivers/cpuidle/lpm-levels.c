@@ -414,8 +414,6 @@ static int cpu_power_select(struct cpuidle_device *dev,
 		msm_pm_set_timer(modified_time_us);
 
 done_select:
-	trace_cpu_power_select(best_level, sleep_us, latency_us, next_event_us);
-
 	return best_level;
 }
 
@@ -821,9 +819,6 @@ static int lpm_cpuidle_enter(struct cpuidle_device *dev,
 	cpu_prepare(cpu, idx, true);
 	cluster_prepare(cpu->parent, cpumask, idx, true, start_time);
 
-	trace_cpu_idle_enter(idx);
-	lpm_stats_cpu_enter(idx, start_time);
-
 	if (need_resched())
 		goto exit;
 
@@ -833,12 +828,10 @@ static int lpm_cpuidle_enter(struct cpuidle_device *dev,
 
 exit:
 	end_time = ktime_to_ns(ktime_get());
-	lpm_stats_cpu_exit(idx, end_time, success);
 
 	cluster_unprepare(cpu->parent, cpumask, idx, true, end_time, success);
 	cpu_unprepare(cpu, idx, true);
 	dev->last_residency = ktime_us_delta(ktime_get(), start);
-	trace_cpu_idle_exit(idx, success);
 	if (cpu->bias) {
                 if (!idx)
 			biastimer_cancel();
