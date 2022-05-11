@@ -127,7 +127,8 @@ static __always_inline void csd_lock(call_single_data_t *csd)
 
 static __always_inline void csd_unlock(call_single_data_t *csd)
 {
-	WARN_ON(!(csd->flags & CSD_FLAG_LOCK));
+	if (!(csd->flags & CSD_FLAG_LOCK))
+		return;
 
 	/*
 	 * ensure we're all done before releasing data:
@@ -142,8 +143,8 @@ static DEFINE_PER_CPU_SHARED_ALIGNED(call_single_data_t, csd_data);
  * for execution on the given CPU. data must already have
  * ->func, ->info, and ->flags set.
  */
-static int generic_exec_single(int cpu, call_single_data_t *csd,
-			       smp_call_func_t func, void *info)
+int generic_exec_single(int cpu, call_single_data_t *csd, smp_call_func_t func,
+			void *info)
 {
 	if (cpu == smp_processor_id()) {
 		unsigned long flags;
