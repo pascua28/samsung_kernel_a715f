@@ -57,6 +57,9 @@
 #define SCM_SVC_SEC_WDOG_DIS	0x7
 #define MAX_CPU_CTX_SIZE	2048
 
+#define migrate_disable() preempt_disable()
+#define migrate_enable() preempt_enable()
+
 static struct msm_watchdog_data *wdog_data;
 
 static int cpu_idle_pc_state[NR_CPUS];
