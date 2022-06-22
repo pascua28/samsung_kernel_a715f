@@ -4205,7 +4205,7 @@ wlan_hdd_cfg80211_roam_events_callback(hdd_handle_t hdd_handle,
 #endif /* End of WLAN_FEATURE_ROAM_OFFLOAD */
 
 #ifdef LINKSPEED_DEBUG_ENABLED
-#define linkspeed_dbg(format, args...) pr_info(format, ## args)
+#define linkspeed_dbg(format, args...) pr_debug(format, ## args)
 #else
 #define linkspeed_dbg(format, args...)
 #endif /* LINKSPEED_DEBUG_ENABLED */

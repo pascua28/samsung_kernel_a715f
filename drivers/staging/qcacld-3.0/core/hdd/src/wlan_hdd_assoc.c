@@ -2036,7 +2036,7 @@ static QDF_STATUS hdd_dis_connect_handler(struct hdd_adapter *adapter,
 		if (roam_info && eCSR_ROAM_LOSTLINK == roam_status) {
 			reason = roam_info->reasonCode;
 			if (reason == REASON_STA_LEAVING)
-				pr_info("wlan: disconnected due to poor signal, rssi is %d dB\n",
+				pr_debug("wlan: disconnected due to poor signal, rssi is %d dB\n",
 					roam_info->rxRssi);
 		}
 		ucfg_mlme_get_discon_reason_n_from_ap(hdd_ctx->psoc,
