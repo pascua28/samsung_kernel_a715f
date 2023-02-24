@@ -36,7 +36,7 @@
 #define MMU_NO_CONTEXT			0x00000000UL
 #define MMU_CONTEXT_TLBPID_LOCK_NR	0
 
-#define enter_lazy_tlb(mm, tsk)	do {} while (0)
+#define enter_lazy_tlb(mm, tsk)	((void)0)
 
 static inline void cpu_ran_vm(int cpu, struct mm_struct *mm)
 {
@@ -134,7 +134,7 @@ static inline void activate_context(struct mm_struct *mm)
  * Destroy context related info for an mm_struct that is about to be put to
  * rest
  */
-#define destroy_context(mm)	do {} while (0)
+#define destroy_context(mm)	((void)0)
 
 /**
  * switch_mm - Change between userspace virtual memory contexts
@@ -157,7 +157,7 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
 	}
 }
 
-#define deactivate_mm(tsk, mm)	do {} while (0)
+#define deactivate_mm(tsk, mm)	((void)0)
 #define activate_mm(prev, next)	switch_mm((prev), (next), NULL)
 
 #endif /* _ASM_MMU_CONTEXT_H */

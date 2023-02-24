@@ -225,16 +225,16 @@ do {							    \
 
 #else /* !LASSERT_ATOMIC_ENABLED */
 
-#define LASSERT_ATOMIC_EQ(a, v)		 do {} while (0)
-#define LASSERT_ATOMIC_NE(a, v)		 do {} while (0)
-#define LASSERT_ATOMIC_LT(a, v)		 do {} while (0)
-#define LASSERT_ATOMIC_LE(a, v)		 do {} while (0)
-#define LASSERT_ATOMIC_GT(a, v)		 do {} while (0)
-#define LASSERT_ATOMIC_GE(a, v)		 do {} while (0)
-#define LASSERT_ATOMIC_GT_LT(a, v1, v2)	 do {} while (0)
-#define LASSERT_ATOMIC_GT_LE(a, v1, v2)	 do {} while (0)
-#define LASSERT_ATOMIC_GE_LT(a, v1, v2)	 do {} while (0)
-#define LASSERT_ATOMIC_GE_LE(a, v1, v2)	 do {} while (0)
+#define LASSERT_ATOMIC_EQ(a, v)		 ((void)0)
+#define LASSERT_ATOMIC_NE(a, v)		 ((void)0)
+#define LASSERT_ATOMIC_LT(a, v)		 ((void)0)
+#define LASSERT_ATOMIC_LE(a, v)		 ((void)0)
+#define LASSERT_ATOMIC_GT(a, v)		 ((void)0)
+#define LASSERT_ATOMIC_GE(a, v)		 ((void)0)
+#define LASSERT_ATOMIC_GT_LT(a, v1, v2)	 ((void)0)
+#define LASSERT_ATOMIC_GT_LE(a, v1, v2)	 ((void)0)
+#define LASSERT_ATOMIC_GE_LT(a, v1, v2)	 ((void)0)
+#define LASSERT_ATOMIC_GE_LE(a, v1, v2)	 ((void)0)
 
 #endif /* LASSERT_ATOMIC_ENABLED */
 

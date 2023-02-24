@@ -940,7 +940,7 @@ static inline void kiblnd_dma_unmap_single(struct ib_device *dev,
 	ib_dma_unmap_single(dev, addr, size, direction);
 }
 
-#define KIBLND_UNMAP_ADDR_SET(p, m, a)  do {} while (0)
+#define KIBLND_UNMAP_ADDR_SET(p, m, a)  ((void)0)
 #define KIBLND_UNMAP_ADDR(p, m, a)      (a)
 
 static inline int kiblnd_dma_map_sg(struct ib_device *dev,

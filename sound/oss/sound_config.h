@@ -125,7 +125,7 @@ static inline int translate_mode(struct file *file)
 #include "dev_table.h"
 
 #ifndef DDB
-#define DDB(x) do {} while (0)
+#define DDB(x) ((void)0)
 #endif
 
 #ifndef MDB

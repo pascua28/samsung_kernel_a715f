@@ -1049,9 +1049,9 @@ static inline void hotplug_cpu_invalidate_cache(void)
 }
 
 #else /* CONFIG_MN10300_CACHE_ENABLED */
-#define hotplug_cpu_disable_cache()	do {} while (0)
-#define hotplug_cpu_enable_cache()	do {} while (0)
-#define hotplug_cpu_invalidate_cache()	do {} while (0)
+#define hotplug_cpu_disable_cache()	((void)0)
+#define hotplug_cpu_enable_cache()	((void)0)
+#define hotplug_cpu_invalidate_cache()	((void)0)
 #endif /* CONFIG_MN10300_CACHE_ENABLED */
 
 /**

@@ -114,10 +114,10 @@ void homecache_free_pages(unsigned long addr, unsigned int order);
  */
 extern int page_home(struct page *);
 
-#define homecache_migrate_kthread() do {} while (0)
+#define homecache_migrate_kthread() ((void)0)
 
 #define homecache_kpte_lock() 0
-#define homecache_kpte_unlock(flags) do {} while (0)
+#define homecache_kpte_unlock(flags) ((void)0)
 
 
 #endif /* _ASM_TILE_HOMECACHE_H */

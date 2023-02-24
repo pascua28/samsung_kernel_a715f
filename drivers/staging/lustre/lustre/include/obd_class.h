@@ -210,8 +210,8 @@ extern void (*class_export_dump_hook)(struct obd_export *);
 
 #else
 
-#define __class_export_add_lock_ref(exp, lock)	     do {} while (0)
-#define __class_export_del_lock_ref(exp, lock)	     do {} while (0)
+#define __class_export_add_lock_ref(exp, lock)	     ((void)0)
+#define __class_export_del_lock_ref(exp, lock)	     ((void)0)
 
 #endif
 

@@ -853,7 +853,7 @@ do {									\
 	}								\
 } while (0)
 #else
-#define dwc2_sample_frrem(_hcd_, _qh_, _letter_)	do {} while (0)
+#define dwc2_sample_frrem(_hcd_, _qh_, _letter_)	((void)0)
 #endif
 
 #endif /* __DWC2_HCD_H__ */

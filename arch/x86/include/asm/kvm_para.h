@@ -103,7 +103,7 @@ static inline void kvm_spinlock_init(void)
 #endif /* CONFIG_PARAVIRT_SPINLOCKS */
 
 #else /* CONFIG_KVM_GUEST */
-#define kvm_guest_init() do {} while (0)
+#define kvm_guest_init() ((void)0)
 #define kvm_async_pf_task_wait(T, I) do {} while(0)
 #define kvm_async_pf_task_wake(T) do {} while(0)
 

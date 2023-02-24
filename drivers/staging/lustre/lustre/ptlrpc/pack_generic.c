@@ -246,8 +246,8 @@ do {									\
 	spin_unlock(&ptlrpc_rs_debug_lock);				\
 } while (0)
 #else
-# define PTLRPC_RS_DEBUG_LRU_ADD(rs) do {} while (0)
-# define PTLRPC_RS_DEBUG_LRU_DEL(rs) do {} while (0)
+# define PTLRPC_RS_DEBUG_LRU_ADD(rs) ((void)0)
+# define PTLRPC_RS_DEBUG_LRU_DEL(rs) ((void)0)
 #endif
 
 struct ptlrpc_reply_state *

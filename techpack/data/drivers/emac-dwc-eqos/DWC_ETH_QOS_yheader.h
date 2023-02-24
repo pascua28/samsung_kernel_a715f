@@ -2121,31 +2121,31 @@ do {\
 #ifdef YDEBUG_PG
 #define DBGPR_PG(x...) printk(KERN_ALERT x)
 #else
-#define DBGPR_PG(x...) do {} while (0)
+#define DBGPR_PG(x...) ((void)0)
 #endif
 
 #ifdef YDEBUG_MDIO
 #define DBGPR_MDIO(x...) printk(KERN_ALERT x)
 #else
-#define DBGPR_MDIO(x...) do {} while (0)
+#define DBGPR_MDIO(x...) ((void)0)
 #endif
 
 #ifdef YDEBUG_PTP
 #define DBGPR_PTP(x...) printk(KERN_ALERT x)
 #else
-#define DBGPR_PTP(x...) do {} while (0)
+#define DBGPR_PTP(x...) ((void)0)
 #endif
 
 #ifdef YDEBUG_FILTER
 #define DBGPR_FILTER(x...) printk(KERN_ALERT x)
 #else
-#define DBGPR_FILTER(x...) do {} while (0)
+#define DBGPR_FILTER(x...) ((void)0)
 #endif
 
 #ifdef YDEBUG_EEE
 #define DBGPR_EEE(x...) printk(KERN_ALERT x)
 #else
-#define DBGPR_EEE(x...) do {} while (0)
+#define DBGPR_EEE(x...) ((void)0)
 #endif
 
 #endif

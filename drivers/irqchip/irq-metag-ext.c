@@ -770,7 +770,7 @@ static void __init meta_intc_init_syscore_ops(struct meta_intc_priv *priv)
 	register_syscore_ops(&meta_intc_syscore_ops);
 }
 #else
-#define meta_intc_init_syscore_ops(priv) do {} while (0)
+#define meta_intc_init_syscore_ops(priv) ((void)0)
 #endif
 
 /**

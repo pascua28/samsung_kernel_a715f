@@ -435,8 +435,8 @@ struct block_io_volume {
 #define blk_io_vol_rqs(q, op)		((q)->blk_io_vol[(op)&1].queuing_rqs)
 #define blk_io_vol_bytes(q, op)		((q)->blk_io_vol[(op)&1].queuing_bytes)
 #else
-#define blk_io_vol_rqs(q, op)		do {} while (0)
-#define blk_io_vol_bytes(q, op)		do {} while (0)
+#define blk_io_vol_rqs(q, op)		((void)0)
+#define blk_io_vol_bytes(q, op)		((void)0)
 #endif
 
 #ifdef CONFIG_BLK_TURBO_WRITE
@@ -485,13 +485,13 @@ int blk_reset_tw_state(struct request_queue *q);
 void blk_update_tw_state(struct request_queue *q, int write_rqs, long long write_bytes);
 void blk_account_tw_io(struct request_queue *q, int opf, int bytes);
 #else
-#define blk_alloc_turbo_write(q)			do {} while (0)
-#define blk_free_turbo_write(q)				do {} while (0)
-#define blk_register_tw_enable_fn(q,fn)			do {} while (0)
-#define blk_register_tw_disable_fn(q,fn)		do {} while (0)
-#define blk_reset_tw_state(q)				do {} while (0)
-#define blk_update_tw_state(q,write_rqs,write_bytes)	do {} while (0)
-#define blk_account_tw_io(q,opf,bytes)			do {} while (0)
+#define blk_alloc_turbo_write(q)			((void)0)
+#define blk_free_turbo_write(q)				((void)0)
+#define blk_register_tw_enable_fn(q,fn)			((void)0)
+#define blk_register_tw_disable_fn(q,fn)		((void)0)
+#define blk_reset_tw_state(q)				((void)0)
+#define blk_update_tw_state(q,write_rqs,write_bytes)	((void)0)
+#define blk_account_tw_io(q,opf,bytes)			((void)0)
 #endif
 
 struct request_queue {

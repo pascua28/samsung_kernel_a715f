@@ -172,9 +172,9 @@ extern unsigned long zero_page_mask;
 	(virt_to_page((void *)(empty_zero_page + \
 	 (((unsigned long)(vaddr)) & zero_page_mask))))
 
-#define pgtable_cache_init()	do {} while (0)
+#define pgtable_cache_init()	((void)0)
 
-#define arch_enter_lazy_cpu_mode()	do {} while (0)
+#define arch_enter_lazy_cpu_mode()	((void)0)
 
 static inline int pte_write(pte_t pte)
 {

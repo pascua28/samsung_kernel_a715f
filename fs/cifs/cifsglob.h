@@ -1307,9 +1307,9 @@ static inline void cifs_stats_bytes_read(struct cifs_tcon *tcon,
 }
 #else
 
-#define  cifs_stats_inc(field) do {} while (0)
-#define  cifs_stats_bytes_written(tcon, bytes) do {} while (0)
-#define  cifs_stats_bytes_read(tcon, bytes) do {} while (0)
+#define  cifs_stats_inc(field) ((void)0)
+#define  cifs_stats_bytes_written(tcon, bytes) ((void)0)
+#define  cifs_stats_bytes_read(tcon, bytes) ((void)0)
 
 #endif
 

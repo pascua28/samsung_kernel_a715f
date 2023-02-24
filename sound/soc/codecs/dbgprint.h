@@ -38,7 +38,7 @@
 		} while (0);
 
 #   else
-#      define _DEBUG(level, fmt, va...) do {} while (0)
+#      define _DEBUG(level, fmt, va...) ((void)0)
 #   endif
 
 #   define MSG(fmt, va...) printk(KERN_INFO PREFIX "%s:%d: "fmt,\
@@ -79,7 +79,7 @@
 #      define _DEBUGMSG(level, fmt, ...)  printf(PREFIX "%s:%d: "fmt,\
 				__FUNCTION__, __LINE__, __VA_ARGS__)
 #   else
-#      define _DEBUGMSG(level, fmt, ...) do {} while (0)
+#      define _DEBUGMSG(level, fmt, ...) ((void)0)
 #   endif
 
 #   define _ERRORMSG(fmt, ...) printf(PREFIX "%s:%s:%d: "fmt, __FILE__,\
@@ -115,7 +115,7 @@
 					TB_FUNC, va))
 //printf(PREFIX "%s:%d: "fmt,__func__,__LINE__,##va);
 #   else
-#      define _DEBUG(level, fmt, va...) do {} while (0)
+#      define _DEBUG(level, fmt, va...) ((void)0)
 #   endif
 
 #   define MSG(fmt, ...) TB_TRACE_INF(TbTracePfx2("tfa", TB_FUNC, __VA_ARGS__))
@@ -151,7 +151,7 @@
 #      define _DEBUG(level, fmt, va...)  printf(PREFIX "%s:%d: "fmt, __func__,\
 						__LINE__, ##va);
 #   else
-#      define _DEBUG(level, fmt, va...) do {} while (0)
+#      define _DEBUG(level, fmt, va...) ((void)0)
 #   endif
 
 #   define MSG(fmt, va...) printf(PREFIX "%s:%s:%d: "fmt, __FILE__, __func__,\

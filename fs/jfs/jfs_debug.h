@@ -93,11 +93,11 @@ extern const struct file_operations jfs_txanchor_proc_fops;
  *	---------
  */
 #else				/* CONFIG_JFS_DEBUG */
-#define ASSERT(p) do {} while (0)
-#define jfs_info(fmt, arg...) do {} while (0)
-#define jfs_debug(fmt, arg...) do {} while (0)
-#define jfs_warn(fmt, arg...) do {} while (0)
-#define jfs_err(fmt, arg...) do {} while (0)
+#define ASSERT(p) ((void)0)
+#define jfs_info(fmt, arg...) ((void)0)
+#define jfs_debug(fmt, arg...) ((void)0)
+#define jfs_warn(fmt, arg...) ((void)0)
+#define jfs_err(fmt, arg...) ((void)0)
 #endif				/* CONFIG_JFS_DEBUG */
 
 /*

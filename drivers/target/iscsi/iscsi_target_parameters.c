@@ -983,7 +983,7 @@ static int iscsi_check_acceptor_state(struct iscsi_param *param, char *value,
 		if (!strcmp(param->value, YES))
 			acceptor_boolean_value = 1;
 		if (acceptor_boolean_value && proposer_boolean_value)
-			do {} while (0);
+			((void)0);
 		else {
 			if (iscsi_update_param_value(param, NO) < 0)
 				return -1;

@@ -102,7 +102,7 @@ do { \
 	} \
 } while (0)
 #else
-#define assert(expr) do {} while (0)
+#define assert(expr) ((void)0)
 #endif
 
 struct sha512_ctx_mgr {

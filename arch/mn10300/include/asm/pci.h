@@ -29,8 +29,8 @@ do {							\
 } while (0)
 
 #else
-#define __pcbdebug(FMT, ADDR, ...)		do {} while (0)
-#define __pcidebug(FMT, BUS, DEVFN, WHERE, ...)	do {} while (0)
+#define __pcbdebug(FMT, ADDR, ...)		((void)0)
+#define __pcidebug(FMT, BUS, DEVFN, WHERE, ...)	((void)0)
 #endif
 
 /* Can be used to override the logic in pci_scan_bus for skipping

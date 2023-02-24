@@ -80,7 +80,7 @@ static U32 g_aAddedSubChIdBits[2];
 			}					\
 		} while (0)
 	#else
-		#define CIF_ASSERT(expr)	do {} while (0)
+		#define CIF_ASSERT(expr)	((void)0)
 	#endif
 
 #elif !defined(__KERNEL__) && defined(__linux__) /* Linux application */
@@ -97,7 +97,7 @@ static U32 g_aAddedSubChIdBits[2];
 		#include <assert.h>
 		#define CIF_ASSERT(expr)	assert(expr)
 	#else
-		#define CIF_ASSERT(expr)	do {} while (0)
+		#define CIF_ASSERT(expr)	((void)0)
 	#endif
 
 #elif defined(WINCE) || defined(WINDOWS) || defined(WIN32)
@@ -118,7 +118,7 @@ static U32 g_aAddedSubChIdBits[2];
 			#define CIF_ASSERT(expr)	_ASSERT(expr)
 		#endif
 	#else
-		#define CIF_ASSERT(expr)	do {} while (0)
+		#define CIF_ASSERT(expr)	((void)0)
 	#endif
 #else
 	#error "Code not present"
@@ -135,7 +135,7 @@ static U32 g_aAddedSubChIdBits[2];
 		#include <assert.h>
 		#define CIF_ASSERT(expr)	assert(expr)
 	#else
-		#define CIF_ASSERT(expr)	do {} while (0)
+		#define CIF_ASSERT(expr)	((void)0)
 	#endif
 #endif
 

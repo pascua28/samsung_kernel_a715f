@@ -2231,8 +2231,8 @@ static const struct file_operations fsl_proc_fops = {
 
 #else				/* !CONFIG_USB_GADGET_DEBUG_FILES */
 
-#define create_proc_file()	do {} while (0)
-#define remove_proc_file()	do {} while (0)
+#define create_proc_file()	((void)0)
+#define remove_proc_file()	((void)0)
 
 #endif				/* CONFIG_USB_GADGET_DEBUG_FILES */
 

@@ -262,7 +262,7 @@ do { \
 	} \
 } while (0)
 #else
-#define call_gadget(_hs, _entry)	do {} while (0)
+#define call_gadget(_hs, _entry)	((void)0)
 #endif
 
 struct dwc2_hsotg;

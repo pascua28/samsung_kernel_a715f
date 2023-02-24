@@ -31,7 +31,7 @@
 		ASB2364_7SEGLEDS = (ONOFF) ? 0x8543077f : 0x7f7f7f7f;	\
 	} while (0)
 #else
-#define mn10300_set_gdbleds(ONOFF) do {} while (0)
+#define mn10300_set_gdbleds(ONOFF) ((void)0)
 #endif
 
 #if MN10300_USE_7SEGLEDS

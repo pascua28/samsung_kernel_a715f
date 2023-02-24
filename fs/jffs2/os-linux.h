@@ -88,14 +88,14 @@ static inline void jffs2_init_inode_info(struct jffs2_inode_info *f)
 #define jffs2_wbuf_process NULL
 #define jffs2_dataflash(c) (0)
 #define jffs2_dataflash_setup(c) (0)
-#define jffs2_dataflash_cleanup(c) do {} while (0)
+#define jffs2_dataflash_cleanup(c) ((void)0)
 #define jffs2_nor_wbuf_flash(c) (0)
 #define jffs2_nor_wbuf_flash_setup(c) (0)
-#define jffs2_nor_wbuf_flash_cleanup(c) do {} while (0)
+#define jffs2_nor_wbuf_flash_cleanup(c) ((void)0)
 #define jffs2_ubivol(c) (0)
 #define jffs2_ubivol_setup(c) (0)
-#define jffs2_ubivol_cleanup(c) do {} while (0)
-#define jffs2_dirty_trigger(c) do {} while (0)
+#define jffs2_ubivol_cleanup(c) ((void)0)
+#define jffs2_dirty_trigger(c) ((void)0)
 
 #else /* NAND and/or ECC'd NOR support present */
 

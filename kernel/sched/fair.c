@@ -5287,7 +5287,7 @@ static inline void update_overutilized_status(struct rq *rq)
 }
 #else
 
-#define update_overutilized_status(rq) do {} while (0)
+#define update_overutilized_status(rq) ((void)0)
 
 #endif /* CONFIG_SMP */
 
