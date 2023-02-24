@@ -110,7 +110,7 @@ do {								    \
 } while (0)
 #define CFS_CHECK_STACK(msgdata, mask, cdls)  __CHECK_STACK(msgdata, mask, cdls)
 #else /* __x86_64__ */
-#define CFS_CHECK_STACK(msgdata, mask, cdls) do {} while (0)
+#define CFS_CHECK_STACK(msgdata, mask, cdls) ((void)0)
 #define CDEBUG_STACK() (0L)
 #endif /* __x86_64__ */
 

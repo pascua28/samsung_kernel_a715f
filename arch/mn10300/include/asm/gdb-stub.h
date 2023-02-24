@@ -113,7 +113,7 @@ extern asmlinkage void __gdbstub_pause(void);
 #ifdef CONFIG_MN10300_CACHE_ENABLED
 extern asmlinkage void gdbstub_purge_cache(void);
 #else
-#define gdbstub_purge_cache()	do {} while (0)
+#define gdbstub_purge_cache()	((void)0)
 #endif
 
 /* Used to prevent crashes in memory access */

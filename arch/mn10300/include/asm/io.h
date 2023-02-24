@@ -16,7 +16,7 @@
 #include <asm/cacheflush.h>
 #include <asm-generic/pci_iomap.h>
 
-#define mmiowb() do {} while (0)
+#define mmiowb() ((void)0)
 
 /*****************************************************************************/
 /*

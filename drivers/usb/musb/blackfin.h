@@ -66,7 +66,7 @@ static void dump_fifo_data(u8 *buf, u16 len)
 	pr_debug("\n");
 }
 #else
-#define dump_fifo_data(buf, len)	do {} while (0)
+#define dump_fifo_data(buf, len)	((void)0)
 #endif
 
 

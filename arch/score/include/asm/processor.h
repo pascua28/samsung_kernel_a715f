@@ -24,7 +24,7 @@ extern unsigned long get_wchan(struct task_struct *p);
 #define current_text_addr() ({ __label__ _l; _l: &&_l; })
 
 #define cpu_relax()		barrier()
-#define release_thread(thread)	do {} while (0)
+#define release_thread(thread)	((void)0)
 
 /*
  * User space process size: 2GB. This is hardcoded into a few places,

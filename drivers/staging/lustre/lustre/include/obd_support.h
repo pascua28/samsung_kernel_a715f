@@ -511,7 +511,7 @@ extern char obd_jobid_var[];
 #define OBD_FAILED			      CFS_FAILED
 
 #ifdef CONFIG_DEBUG_SLAB
-#define POISON(ptr, c, s) do {} while (0)
+#define POISON(ptr, c, s) ((void)0)
 #define POISON_PTR(ptr)  ((void)0)
 #else
 #define POISON(ptr, c, s) memset(ptr, c, s)

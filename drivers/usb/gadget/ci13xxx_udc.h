@@ -275,8 +275,8 @@ do { \
 #define trace(format, args...)      ci13xxx_printk(KERN_DEBUG, format, ## args)
 #define dbg_trace(format, args...)  dev_dbg(dev, format, ##args)
 #else
-#define trace(format, args...)      do {} while (0)
-#define dbg_trace(format, args...)  do {} while (0)
+#define trace(format, args...)      ((void)0)
+#define dbg_trace(format, args...)  ((void)0)
 #endif
 
 #endif	/* _CI13XXX_h_ */

@@ -37,7 +37,7 @@ int __init metag_da_probe(void);
 #else /* !CONFIG_METAG_DA */
 
 #define metag_da_enabled() false
-#define metag_da_probe() do {} while (0)
+#define metag_da_probe() ((void)0)
 
 #endif
 

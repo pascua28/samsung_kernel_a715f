@@ -19,12 +19,12 @@ extern void flush_dcache_page(struct page *page);
 
 #define PG_dcache_dirty         PG_arch_1
 
-#define flush_cache_dup_mm(mm)			do {} while (0)
+#define flush_cache_dup_mm(mm)			((void)0)
 #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
-#define flush_dcache_mmap_lock(mapping)		do {} while (0)
-#define flush_dcache_mmap_unlock(mapping)	do {} while (0)
-#define flush_cache_vmap(start, end)		do {} while (0)
-#define flush_cache_vunmap(start, end)		do {} while (0)
+#define flush_dcache_mmap_lock(mapping)		((void)0)
+#define flush_dcache_mmap_unlock(mapping)	((void)0)
+#define flush_cache_vmap(start, end)		((void)0)
+#define flush_cache_vunmap(start, end)		((void)0)
 
 static inline void flush_icache_page(struct vm_area_struct *vma,
 	struct page *page)

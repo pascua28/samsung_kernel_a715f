@@ -1099,7 +1099,7 @@ static void mdc_adjust_dirpages(struct page **pages, int cfs_pgs, int lu_pgs)
 	LASSERTF(lu_pgs == 0, "left = %d", lu_pgs);
 }
 #else
-#define mdc_adjust_dirpages(pages, cfs_pgs, lu_pgs) do {} while (0)
+#define mdc_adjust_dirpages(pages, cfs_pgs, lu_pgs) ((void)0)
 #endif  /* PAGE_SIZE > LU_PAGE_SIZE */
 
 /* parameters for readdir page */

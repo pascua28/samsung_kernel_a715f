@@ -67,7 +67,7 @@ typedef pte_t *pte_addr_t;
 
 #define swapper_pg_dir		((pgd_t *) NULL)
 
-#define pgtable_cache_init()		do {} while (0)
+#define pgtable_cache_init()		((void)0)
 
 #include <asm-generic/pgtable.h>
 

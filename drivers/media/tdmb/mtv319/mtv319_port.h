@@ -151,10 +151,10 @@ extern "C"{
 
 #else
     /* To eliminates the debug messages. */
-    #define RTV_DBGMSG0(fmt)			do {} while (0)
-    #define RTV_DBGMSG1(fmt, arg1)		do {} while (0)
-    #define RTV_DBGMSG2(fmt, arg1, arg2)	do {} while (0)
-    #define RTV_DBGMSG3(fmt, arg1, arg2, arg3)	do {} while (0)
+    #define RTV_DBGMSG0(fmt)			((void)0)
+    #define RTV_DBGMSG1(fmt, arg1)		((void)0)
+    #define RTV_DBGMSG2(fmt, arg1, arg2)	((void)0)
+    #define RTV_DBGMSG3(fmt, arg1, arg2, arg3)	((void)0)
 #endif
 /*#### End of Common ###########*/
 

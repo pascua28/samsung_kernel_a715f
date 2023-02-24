@@ -47,7 +47,7 @@ extern const int kretprobe_blacklist_size;
 extern int kprobe_exceptions_notify(struct notifier_block *self,
 				    unsigned long val, void *data);
 
-#define flush_insn_slot(p)  do {} while (0)
+#define flush_insn_slot(p)  ((void)0)
 
 extern void arch_remove_kprobe(struct kprobe *p);
 

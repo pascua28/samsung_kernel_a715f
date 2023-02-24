@@ -66,8 +66,8 @@
 #define dprintk(fmt, args...) \
 	do { printk(KERN_DEBUG PFX fmt, ## args); } while (0)
 #else
-#define assert(expr) do {} while (0)
-#define dprintk(fmt, args...)	do {} while (0)
+#define assert(expr) ((void)0)
+#define dprintk(fmt, args...)	((void)0)
 #endif /* RTL8169_DEBUG */
 
 #define R8169_MSG_DEFAULT \

@@ -227,7 +227,7 @@ static inline void invalidate_dcache_region(void *start, unsigned long size)
 }
 #else
 #define flush_dcache_region(s, l)	metag_data_cache_flush((s), (l))
-#define writeback_dcache_region(s, l)	do {} while (0)
+#define writeback_dcache_region(s, l)	((void)0)
 #define invalidate_dcache_region(s, l)	flush_dcache_region((s), (l))
 #endif
 

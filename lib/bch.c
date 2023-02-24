@@ -88,7 +88,7 @@
 #define BCH_ECC_BYTES(_p)      DIV_ROUND_UP(GF_M(_p)*GF_T(_p), 8)
 
 #ifndef dbg
-#define dbg(_fmt, args...)     do {} while (0)
+#define dbg(_fmt, args...)     ((void)0)
 #endif
 
 /*

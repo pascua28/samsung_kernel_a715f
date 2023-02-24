@@ -78,7 +78,7 @@ static inline void fscache_hist(atomic_t histogram[], unsigned long start_jif)
 extern const struct file_operations fscache_histogram_fops;
 
 #else
-#define fscache_hist(hist, start_jif) do {} while (0)
+#define fscache_hist(hist, start_jif) ((void)0)
 #endif
 
 /*
@@ -148,7 +148,7 @@ extern int __init fscache_proc_init(void);
 extern void fscache_proc_cleanup(void);
 #else
 #define fscache_proc_init()	(0)
-#define fscache_proc_cleanup()	do {} while (0)
+#define fscache_proc_cleanup()	((void)0)
 #endif
 
 /*
@@ -291,8 +291,8 @@ extern const struct file_operations fscache_stats_fops;
 #else
 
 #define __fscache_stat(stat) (NULL)
-#define fscache_stat(stat) do {} while (0)
-#define fscache_stat_d(stat) do {} while (0)
+#define fscache_stat(stat) ((void)0)
+#define fscache_stat_d(stat) ((void)0)
 #endif
 
 /*
@@ -460,9 +460,9 @@ do {									\
 
 #else
 
-#define ASSERT(X)			do {} while (0)
-#define ASSERTCMP(X, OP, Y)		do {} while (0)
-#define ASSERTIF(C, X)			do {} while (0)
-#define ASSERTIFCMP(C, X, OP, Y)	do {} while (0)
+#define ASSERT(X)			((void)0)
+#define ASSERTCMP(X, OP, Y)		((void)0)
+#define ASSERTIF(C, X)			((void)0)
+#define ASSERTIFCMP(C, X, OP, Y)	((void)0)
 
 #endif /* assert or not */

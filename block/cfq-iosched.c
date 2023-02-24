@@ -798,7 +798,7 @@ static inline void cfqg_put(struct cfq_group *cfqg) { }
 			cfq_cfqq_sync((cfqq)) ? 'S' : 'A',		\
 			cfqq_type((cfqq)) == SYNC_NOIDLE_WORKLOAD ? 'N' : ' ',\
 				##args)
-#define cfq_log_cfqg(cfqd, cfqg, fmt, args...)		do {} while (0)
+#define cfq_log_cfqg(cfqd, cfqg, fmt, args...)		((void)0)
 
 static inline void cfqg_stats_update_io_add(struct cfq_group *cfqg,
 			struct cfq_group *curr_cfqg, unsigned int op) { }

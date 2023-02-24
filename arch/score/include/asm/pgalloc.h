@@ -81,6 +81,6 @@ do {							\
 	tlb_remove_page((tlb), pte);			\
 } while (0)
 
-#define check_pgt_cache()		do {} while (0)
+#define check_pgt_cache()		((void)0)
 
 #endif /* _ASM_SCORE_PGALLOC_H */

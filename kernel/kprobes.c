@@ -963,15 +963,15 @@ static void __disarm_kprobe(struct kprobe *p, bool reopt)
 
 #else /* !CONFIG_OPTPROBES */
 
-#define optimize_kprobe(p)			do {} while (0)
-#define unoptimize_kprobe(p, f)			do {} while (0)
-#define kill_optimized_kprobe(p)		do {} while (0)
-#define prepare_optimized_kprobe(p)		do {} while (0)
-#define try_to_optimize_kprobe(p)		do {} while (0)
+#define optimize_kprobe(p)			((void)0)
+#define unoptimize_kprobe(p, f)			((void)0)
+#define kill_optimized_kprobe(p)		((void)0)
+#define prepare_optimized_kprobe(p)		((void)0)
+#define try_to_optimize_kprobe(p)		((void)0)
 #define __arm_kprobe(p)				arch_arm_kprobe(p)
 #define __disarm_kprobe(p, o)			arch_disarm_kprobe(p)
 #define kprobe_disarmed(p)			kprobe_disabled(p)
-#define wait_for_kprobe_optimizer()		do {} while (0)
+#define wait_for_kprobe_optimizer()		((void)0)
 
 static int reuse_unused_kprobe(struct kprobe *ap)
 {
@@ -1044,8 +1044,8 @@ static void disarm_kprobe_ftrace(struct kprobe *p)
 }
 #else	/* !CONFIG_KPROBES_ON_FTRACE */
 #define prepare_kprobe(p)	arch_prepare_kprobe(p)
-#define arm_kprobe_ftrace(p)	do {} while (0)
-#define disarm_kprobe_ftrace(p)	do {} while (0)
+#define arm_kprobe_ftrace(p)	((void)0)
+#define disarm_kprobe_ftrace(p)	((void)0)
 #endif
 
 /* Arm a kprobe with text_mutex */

@@ -586,7 +586,7 @@ extern void lockdep_invariant_state(bool force);
 extern void lockdep_init_task(struct task_struct *task);
 extern void lockdep_free_task(struct task_struct *task);
 #else /* !CROSSRELEASE */
-#define lockdep_init_map_crosslock(m, n, k, s) do {} while (0)
+#define lockdep_init_map_crosslock(m, n, k, s) ((void)0)
 /*
  * To initialize a lockdep_map statically use this macro.
  * Note that _name must not be NULL.
@@ -629,8 +629,8 @@ do {								\
 
 #else /* CONFIG_LOCK_STAT */
 
-#define lock_contended(lockdep_map, ip) do {} while (0)
-#define lock_acquired(lockdep_map, ip) do {} while (0)
+#define lock_contended(lockdep_map, ip) ((void)0)
+#define lock_acquired(lockdep_map, ip) ((void)0)
 
 #define LOCK_CONTENDED(_lock, try, lock) \
 	lock(_lock)

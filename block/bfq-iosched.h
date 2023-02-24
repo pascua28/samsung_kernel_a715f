@@ -946,7 +946,7 @@ struct bfq_group *bfqq_group(struct bfq_queue *bfqq);
 	blk_add_trace_msg((bfqd)->queue, "bfq%d%c " fmt, (bfqq)->pid,	\
 			bfq_bfqq_sync((bfqq)) ? 'S' : 'A',		\
 				##args)
-#define bfq_log_bfqg(bfqd, bfqg, fmt, args...)		do {} while (0)
+#define bfq_log_bfqg(bfqd, bfqg, fmt, args...)		((void)0)
 
 #endif /* CONFIG_BFQ_GROUP_IOSCHED */
 
