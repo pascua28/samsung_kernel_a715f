@@ -2144,8 +2144,8 @@ static unsigned long __zs_compact(struct zs_pool *pool,
 		if (fg == ZS_INUSE_RATIO_0) {
 			free_zspage(pool, class, src_zspage);
 			pages_freed += class->pages_per_zspage;
-			src_zspage = NULL;
 		}
+		src_zspage = NULL;
 
 		if (get_fullness_group(class, dst_zspage) == ZS_INUSE_RATIO_100
 		    || rwlock_is_contended(&pool->migrate_lock)) {
