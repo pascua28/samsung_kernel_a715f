@@ -389,7 +389,7 @@ endif
 # Make variables (CC, etc...)
 CPP		= $(CC) -E
 ifneq ($(LLVM),)
-CC		= clang
+CC		= ccache clang
 LD		= ld.lld
 AR		= llvm-ar
 NM		= llvm-nm
