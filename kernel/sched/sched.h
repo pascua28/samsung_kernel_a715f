@@ -543,6 +543,7 @@ struct cfs_rq {
 #endif /* CONFIG_SMP */
 
 #ifdef CONFIG_FAIR_GROUP_SCHED
+	u64 last_update_tg_load_avg;
 	struct rq *rq;	/* cpu runqueue to which this cfs_rq is attached */
 
 	/*
