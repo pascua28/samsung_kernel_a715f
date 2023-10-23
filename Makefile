@@ -911,6 +911,13 @@ KBUILD_CFLAGS	+= $(call cc-option,-ffunction-sections,)
 KBUILD_CFLAGS	+= $(call cc-option,-fdata-sections,)
 endif
 
+ifeq ($(cc-name),clang)
+#Enable MLGO for register allocation.
+KBUILD_CFLAGS   += -mllvm -regalloc-enable-advisor=release
+#Enable hot cold split optimization
+KBUILD_CFLAGS   += -mllvm -hot-cold-split=true
+endif
+
 ifdef CONFIG_LTO_CLANG
 ifdef CONFIG_THINLTO
 lto-clang-flags	:= -flto=thin
