@@ -205,8 +205,10 @@ void panic(const char *fmt, ...)
 #endif
 	trace_kernel_panic(0);
 
+#ifdef CONFIG_SEC_DEBUG
 	/*To prevent watchdog reset during panic handling. */
 	emerg_pet_watchdog();
+#endif
 	if (panic_on_warn) {
 		/*
 		 * This thread may hit another WARN() in the panic path.
@@ -247,9 +249,10 @@ void panic(const char *fmt, ...)
 	if (old_cpu != PANIC_CPU_INVALID && old_cpu != this_cpu)
 		panic_smp_self_stop();
 
+#ifdef CONFIG_SEC_DEBUG
 	sec_debug_sched_msg("!!panic!!");
-
 	sec_debug_sched_msg("!!panic!!");
+#endif
 
 	console_verbose();
 	bust_spinlocks(1);
