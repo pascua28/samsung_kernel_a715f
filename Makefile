@@ -743,6 +743,8 @@ KBUILD_CFLAGS   += -Os
 else
 KBUILD_CFLAGS   += -O2
 ifeq ($(cc-name),clang)
+#Enable fast FMA optimizations
+KBUILD_CFLAGS   += -ffp-contract=fast
 #Enable MLGO for register allocation.
 KBUILD_CFLAGS   += -mllvm -regalloc-enable-advisor=release
 #Enable hot cold split optimization
