@@ -750,6 +750,7 @@ KBUILD_CFLAGS   += -mllvm -hot-cold-split=true
 KBUILD_CFLAGS	+= -mcpu=cortex-a55 -mtune=cortex-a55
 ifdef CONFIG_POLLY_CLANG
 POLLY_FLAGS	+= -mllvm -polly \
+		   -mllvm -polly-parallel \
 		   -mllvm -polly-ast-use-context \
 		   -mllvm -polly-invariant-load-hoisting \
 		   -mllvm -polly-loopfusion-greedy=1 \
