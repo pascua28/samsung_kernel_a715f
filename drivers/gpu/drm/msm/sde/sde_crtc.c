@@ -3624,7 +3624,7 @@ static void _sde_crtc_setup_mixer_for_encoder(
 	}
 }
 
-static void _sde_crtc_setup_mixers(struct drm_crtc *crtc)
+static inline void _sde_crtc_setup_mixers(struct drm_crtc *crtc)
 {
 	struct sde_crtc *sde_crtc = to_sde_crtc(crtc);
 	struct drm_encoder *enc;
@@ -5275,7 +5275,7 @@ static int _sde_crtc_check_secure_state(struct drm_crtc *crtc,
 	return 0;
 }
 
-static int sde_crtc_atomic_check(struct drm_crtc *crtc,
+static inline int sde_crtc_atomic_check(struct drm_crtc *crtc,
 		struct drm_crtc_state *state)
 {
 	struct drm_device *dev;
