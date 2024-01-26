@@ -30,6 +30,7 @@
 #include <linux/suspend.h>
 #include <linux/syscore_ops.h>
 #include <linux/tick.h>
+#include <linux/binfmts.h>
 #include <linux/sched/topology.h>
 
 #include <trace/events/power.h>
@@ -2329,6 +2330,9 @@ void cpufreq_update_policy(unsigned int cpu)
 {
 	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
 	struct cpufreq_policy new_policy;
+
+	if (task_is_booster())
+		return;
 
 	if (!policy)
 		return;
