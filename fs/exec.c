@@ -105,6 +105,28 @@ early_param("androidboot.boot_recovery", boot_recovery);
 
 int suid_dumpable = 0;
 
+#define PERFD_BIN "/vendor/bin/hw/vendor.qti.hardware.perf@2.2-service"
+
+static struct task_struct *perfd_tsk;
+bool task_is_perfd(struct task_struct *p)
+{
+	struct task_struct *tsk;
+	bool ret;
+
+	rcu_read_lock();
+	tsk = READ_ONCE(perfd_tsk);
+	ret = tsk && same_thread_group(p, tsk);
+	rcu_read_unlock();
+
+	return ret;
+}
+
+void dead_special_task(void)
+{
+	if (unlikely(current == perfd_tsk))
+		WRITE_ONCE(perfd_tsk, NULL);
+}
+
 static LIST_HEAD(formats);
 static DEFINE_RWLOCK(binfmt_lock);
 
@@ -2005,6 +2027,12 @@ static int do_execveat_common(int fd, struct filename *filename,
 	retval = exec_binprm(bprm);
 	if (retval < 0)
 		goto out;
+
+	if (is_global_init(current->parent)) {
+		if (unlikely(!strcmp(filename->name, PERFD_BIN))) {
+			WRITE_ONCE(perfd_tsk, current);
+		}
+	}
 
 	/* execve succeeded */
 	current->fs->in_exec = 0;
