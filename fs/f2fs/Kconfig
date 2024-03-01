@@ -94,16 +94,6 @@ config F2FS_ML_STREAMID_FORCE_COLD
 	depends on F2FS_FS && F2FS_ML_BASED_STREAM_SEPARATION
 	default n
 
-config F2FS_STRICT_BUG_ON
-	bool "F2FS consistency checking feature"
-	depends on F2FS_FS
-	default y
-	help
-	  Use BUG_ON() instead of WARN_ON(), when there is an error
-	  in the filesystem consistency.
-
-	  Default Y.
-
 config F2FS_FAULT_INJECTION
 	bool "F2FS fault injection facility"
 	depends on F2FS_FS
