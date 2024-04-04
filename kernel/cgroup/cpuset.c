@@ -2032,8 +2032,8 @@ static void uclamp_set(struct kernfs_open_file *of,
 
 	static struct ucl_param tgts[] = {
 		{"audio-app",		"0",  "60",  0, 0},
-		{"top-app",    	     	"0", "100",  0, 1},
-		{"foreground", 	     	"0",  "50",  0, 1},
+		{"top-app",    	     	"0", "max",  1, 1},
+		{"foreground", 	     	"0",  "80",  1, 0},
 		{"background", 	     	"0",  "40",  0, 0},
 		{"system-background", 	"0",  "40",  0, 0},
 		{"restricted",          "0",  "20",  0, 0},
