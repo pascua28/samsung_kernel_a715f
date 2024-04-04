@@ -140,14 +140,14 @@ static int cass_best_cpu(struct task_struct *p, int prev_cpu, bool sync, bool rt
 	 * otherwise, if only one CPU is allowed and it is skipped before
 	 * @curr->cpu is set, then @best->cpu will be garbage.
 	 */
-	for_each_cpu_and(cpu, p->cpus_ptr, cpu_active_mask) {
+	for_each_cpu_and(cpu, &p->cpus_allowed, cpu_active_mask) {
 		/* Use the free candidate slot for @curr */
 		struct cass_cpu_cand *curr = &cands[cidx];
 		struct cpuidle_state *idle_state;
 		struct rq *rq = cpu_rq(cpu);
 
 		/* Get the capacity of this CPU adjusted for thermal pressure */
-		curr->cap_max = arch_scale_cpu_capacity(cpu) -
+		curr->cap_max = arch_scale_cpu_capacity(NULL, cpu) -
 				thermal_load_avg(rq);
 
 		/* Prefer the CPU that meets the uclamp minimum requirement */
@@ -160,7 +160,7 @@ static int cass_best_cpu(struct task_struct *p, int prev_cpu, bool sync, bool rt
 		 * only running task.
 		 */
 		if ((sync && cpu == this_cpu && rq->nr_running == 1) ||
-		    available_idle_cpu(cpu) || sched_idle_cpu(cpu)) {
+		    idle_cpu(cpu) || sched_idle_cpu(cpu)) {
 			/*
 			 * A non-idle candidate may be better when @p is uclamp
 			 * boosted. Otherwise, always prefer idle candidates.
@@ -236,8 +236,8 @@ static int cass_select_task_rq(struct task_struct *p, int prev_cpu,
 	 * first valid CPU since it's possible for certain types of tasks to run
 	 * on inactive CPUs.
 	 */
-	if (unlikely(!cpumask_intersects(p->cpus_ptr, cpu_active_mask)))
-		return cpumask_first(p->cpus_ptr);
+	if (unlikely(!cpumask_intersects(&p->cpus_allowed, cpu_active_mask)))
+		return cpumask_first(&p->cpus_allowed);
 
 	/* cass_best_cpu() needs the CFS task's utilization, so sync it up */
 	if (!rt && !(wake_flags & SD_BALANCE_FORK))
@@ -247,13 +247,14 @@ static int cass_select_task_rq(struct task_struct *p, int prev_cpu,
 	return cass_best_cpu(p, prev_cpu, sync, rt);
 }
 
-static int cass_select_task_rq_fair(struct task_struct *p, int prev_cpu,
-				    int wake_flags)
+static int cass_select_task_rq_fair(struct task_struct *p, int prev_cpu, int sd_flag,
+				    int wake_flags, int sibling_count_hint)
 {
 	return cass_select_task_rq(p, prev_cpu, wake_flags, false);
 }
 
-int cass_select_task_rq_rt(struct task_struct *p, int prev_cpu, int wake_flags)
+int cass_select_task_rq_rt(struct task_struct *p, int prev_cpu, int sd_flag,
+			   int wake_flags, int sibling_count_hint)
 {
 	return cass_select_task_rq(p, prev_cpu, wake_flags, true);
 }
