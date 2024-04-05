@@ -376,7 +376,7 @@ int update_dl_rq_load_avg(u64 now, struct rq *rq, int running)
 
 int update_thermal_load_avg(u64 now, struct rq *rq, u64 capacity)
 {
-	if (___update_load_sum(now, &rq->avg_thermal,
+	if (___update_load_sum(now, rq->cpu, &rq->avg_thermal,
 			       capacity,
 			       capacity,
 			       capacity)) {
