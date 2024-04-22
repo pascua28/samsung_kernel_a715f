@@ -745,8 +745,6 @@ KBUILD_CFLAGS   += -O2
 ifeq ($(cc-name),clang)
 #Enable fast FMA optimizations
 KBUILD_CFLAGS   += -ffp-contract=fast
-#Enable MLGO for register allocation.
-KBUILD_CFLAGS   += -mllvm -regalloc-enable-advisor=release
 #Enable hot cold split optimization
 KBUILD_CFLAGS   += -mllvm -hot-cold-split=true
 KBUILD_CFLAGS	+= -mcpu=cortex-a55 -mtune=cortex-a55
@@ -849,7 +847,6 @@ KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
 
 ifeq ($(ld-name),lld)
 LDFLAGS += -O3
-LDFLAGS += -mllvm -regalloc-enable-advisor=release
 LDFLAGS += -mllvm -enable-ml-inliner=release
 endif
 
