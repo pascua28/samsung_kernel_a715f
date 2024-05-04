@@ -254,8 +254,18 @@ static void balance_irqs(void)
 		bd->intrs += bi->delta_nr;
 
 		/* Consider this IRQ for balancing if it's movable */
-		if (!__irq_can_set_affinity(bi->desc))
+		if (!__irq_can_set_affinity(bi->desc)) {
+			if (sbalance_debug) {
+				if (bi->desc->action && bi->desc->action->name)
+					pr_info("IRQ%d (%s) unmovable\n",
+						irq_desc_get_irq(bi->desc),
+						bi->desc->action->name);
+				else
+					pr_info("IRQ%d unmovable\n",
+						irq_desc_get_irq(bi->desc));
+			}
 			continue;
+		}
 
 		/* Ignore for this balancing run if something else moved it */
 		if (cpu != bi->prev_cpu) {
