@@ -171,8 +171,8 @@ static int cass_best_cpu(struct task_struct *p, int prev_cpu, bool sync, bool rt
 		/* Get the _current_, capacity of this CPU */
 		curr->cap_max = capacity_of(cpu);
 
-		/* Prefer the CPU that meets the uclamp minimum requirement */
-		if (curr->cap_max < uc_min && best->cap_max >= uc_min)
+		/* Prefer the CPU that more closely meets the uclamp minimum */
+		if (curr->cap_max < uc_min && curr->cap_max < best->cap_max)
 			continue;
 
 		/*
