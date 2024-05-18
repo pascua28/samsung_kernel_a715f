@@ -61,7 +61,8 @@ static int lim_get_crypto_digest_len(uint8_t *type)
 		return SHA384_DIGEST_SIZE;
 	else if (!strcmp(type, HMAC_SHA256_CRYPTO_TYPE))
 		return SHA256_DIGEST_SIZE;
-	return -EINVAL;
+
+	return 0;
 }
 
 /**
@@ -282,6 +283,11 @@ static QDF_STATUS lim_get_key_from_prf(uint8_t *type, uint8_t *secret,
 	uint16_t interation;
 	uint8_t crypto_digest_len = lim_get_crypto_digest_len(type);
 	uint8_t tmp_hash[SHA384_DIGEST_SIZE] = {0};
+
+	if (!crypto_digest_len) {
+		pe_err("Incorrect crypto length");
+		return QDF_STATUS_E_FAILURE;
+	}
 
 	addr[0] = count;
 	len[0] = sizeof(count);
@@ -878,11 +884,6 @@ static QDF_STATUS lim_process_auth_wrapped_data(struct pe_session *pe_session,
 	} else {
 		pe_err("invalid remaining len %d",
 			remaining_len);
-	}
-	
-	if (sizeof(hash) < auth_tag_len) {
-		pe_err("sizeof(hash) < auth_tag_len check failed");
-		return QDF_STATUS_E_FAILURE;
 	}
 	if (qdf_mem_cmp(wrapped_data, hash, auth_tag_len)) {
 		pe_err("integratity check failed for auth, crypto %d",
@@ -2239,6 +2240,11 @@ QDF_STATUS aead_decrypt_assoc_rsp(struct mac_context *mac_ctx,
 	uint32_t data_len, fils_ies_len;
 	uint8_t *fils_ies;
 	struct pe_fils_session *fils_info = session->fils_info;
+
+	if (*n_frame < FIXED_PARAM_OFFSET_ASSOC_RSP) {
+		pe_debug("payload len is less than ASSOC RES offset");
+		return QDF_STATUS_E_FAILURE;
+	}
 
 	status = find_ie_data_after_fils_session_ie(mac_ctx, p_frame +
 					      FIXED_PARAM_OFFSET_ASSOC_RSP,
