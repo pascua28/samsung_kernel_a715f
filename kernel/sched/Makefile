@@ -35,4 +35,3 @@ ifndef CONFIG_SCHED_CORE_CTL
 obj-$(CONFIG_SCHED_WALT) += rotation_ctl.o
 endif
 obj-$(CONFIG_PSI) += psi.o
-obj-$(CONFIG_SPRD_ROTATION_TASK) += sprd_rotation.o
