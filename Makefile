@@ -382,7 +382,7 @@ endif
 # Make variables (CC, etc...)
 CPP		= $(CC) -E
 ifneq ($(LLVM),)
-CC		= $(which ccache) $(CLANG_DIR)clang
+CC		= ccache $(CLANG_DIR)clang
 LD		= $(CLANG_DIR)ld.lld
 AR		= $(CLANG_DIR)llvm-ar
 NM		= $(CLANG_DIR)llvm-nm
@@ -391,7 +391,7 @@ OBJDUMP		= $(CLANG_DIR)llvm-objdump
 READELF		= $(CLANG_DIR)llvm-readelf
 STRIP		= $(CLANG_DIR)llvm-strip
 else
-CC		= $(CROSS_COMPILE)gcc
+CC		= ccache $(CROSS_COMPILE)gcc
 LD		= $(CROSS_COMPILE)ld
 LDGOLD		= $(CROSS_COMPILE)ld.gold
 AR		= $(CROSS_COMPILE)ar
