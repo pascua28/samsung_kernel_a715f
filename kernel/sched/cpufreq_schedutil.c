@@ -292,7 +292,7 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
 				policy->cpuinfo.max_freq : policy->cur;
 	unsigned int idx, l_freq, h_freq;
 
-	freq = (freq + (freq >> 2)) * util / max;
+	freq = freq * util / max;
 
 	if (freq == sg_policy->cached_raw_freq && sg_policy->next_freq != UINT_MAX)
 		return sg_policy->next_freq;
@@ -334,7 +334,8 @@ static void sugov_get_util(unsigned long *util, unsigned long *max, int cpu,
 			delta = 0;
 		rt = div64_u64(rq->rt_avg, sched_avg_period() + delta);
 		rt = (rt * max_cap) >> SCHED_CAPACITY_SHIFT;
-		*util = min(*util + rt, max_cap);
+		*util = min(apply_dvfs_headroom(*util, cpu, true) +
+				apply_dvfs_headroom(rt, cpu, true), max_cap);
 	}
 }
 
