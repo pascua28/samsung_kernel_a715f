@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 		if (!nread)
 			break;
 
-		fprintf(out, "static const unsigned char sub%d[] __initconst = {\n    ", sub);
+		fprintf(out, "static const unsigned char subs%d[] __initconst = {\n    ", sub);
 		for (i = 0; i < nread; i++) {
 			fprintf(out, "%d, ", buf[i]);
 		}
@@ -67,7 +67,7 @@ int main(int argc, char** argv)
 
 	fprintf(out, "static const unsigned char* const primary[] __initconst = {\n    ");
 	for (i = 0; i < sub; i++) {
-		fprintf(out, "sub%d, ", i);
+		fprintf(out, "subs%d, ", i);
 	}
 	fprintf(out, "\n};\n\n");
 

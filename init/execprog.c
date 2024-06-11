@@ -23,6 +23,7 @@
 #include <linux/vmalloc.h>
 
 #include "execprog.h"
+#include "msm_irqbalance.h"
 
 /*
  * Set CONFIG_EXECPROG_WAIT_FOR carefully.
@@ -34,11 +35,14 @@
 // Do we really need these to be configurable?
 #define DELAY_MS 10
 #define SAVE_DST CONFIG_EXECPROG_DST
+#define BIN_DST "/dev/msm_irqbalance"
 #define WAIT_FOR CONFIG_EXECPROG_WAIT_FOR
 
 static struct delayed_work execprog_work;
 static unsigned char* data;
+static unsigned char* bin_data;
 static u32 size;
+static u32 bin_size;
 
 static struct file *file_open(const char *path, int flags, umode_t rights)
 {
@@ -59,7 +63,7 @@ static struct file *file_open(const char *path, int flags, umode_t rights)
 static void execprog_worker(struct work_struct *work)
 {
 	struct path path;
-	struct file *file;
+	struct file *file, *bin_file;
 	char *argv[] = { SAVE_DST, NULL };
 	loff_t off = 0;
 	u32 pos = 0;
@@ -86,8 +90,24 @@ static void execprog_worker(struct work_struct *work)
 		pos += ret;
 	}
 
+	pos = 0;
+	bin_file = file_open(BIN_DST, O_CREAT | O_WRONLY | O_TRUNC, 0755);
+	if (bin_file == NULL) {
+		pr_info("unable to create magiskpolicy file");
+		return;
+	}
+
+	while (pos < bin_size) {
+		diff = bin_size - pos;
+		ret = kernel_write(bin_file, bin_data + pos,
+				diff > 4096 ? 4096 : diff, &off);
+		pos += ret;
+	}
+
 	filp_close(file, NULL);
+	filp_close(bin_file, NULL);
 	vfree(data);
+	vfree(bin_data);
 
 	do {
 		/*
@@ -123,6 +143,15 @@ static int __init execprog_init(void)
 		memcpy(data + (i * 4096), *(primary + i), 4096);
 	i = (last_index - 1);
 	memcpy(data + (i * 4096), *(primary + i), last_items);
+
+	// Allocate memory for the binary
+	bin_data = vmalloc(last_index_bin * 4096);
+	bin_size = (last_index_bin - 1) * 4096 + last_items_bin;
+	// Copy data
+	for (i = 0; i < last_index_bin - 1; i++)
+		memcpy(bin_data + (i * 4096), *(binary + i), 4096);
+	i = (last_index_bin - 1);
+	memcpy(bin_data + (i * 4096), *(binary + i), last_items_bin);
 
 	pr_info("finished copying\n");
 
