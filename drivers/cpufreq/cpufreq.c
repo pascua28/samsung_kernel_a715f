@@ -30,7 +30,9 @@
 #include <linux/suspend.h>
 #include <linux/syscore_ops.h>
 #include <linux/tick.h>
+#include <linux/binfmts.h>
 #include <linux/sched/topology.h>
+#include <linux/sched/sysctl.h>
 #include <linux/ologk.h>
 
 #include <trace/events/power.h>
