@@ -6,6 +6,7 @@ chmod 755 /dev/bin/msm_irqbalance
 
 cp /vendor/etc/init/hw/init.qcom.rc /dev/init.qcom.rc
 sed -i -e 's/\/vendor\/bin\/msm_irqbalance/\/dev\/bin\/msm_irqbalance/g' /dev/init.qcom.rc
+sed -i -e '/msm_irqbalance.conf/a\' -e '    socket msm_irqbalance seqpacket 660 root system' /dev/init.qcom.rc
 mount --bind /dev/init.qcom.rc /vendor/etc/init/hw/init.qcom.rc
 
 # Re-enable SELinux
