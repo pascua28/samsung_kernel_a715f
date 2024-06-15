@@ -155,11 +155,14 @@ static unsigned long limits_mitigation_notify(struct limits_dcvs_hw *hw)
 	struct device *cpu_dev = NULL;
 	unsigned long freq_val, max_limit = 0;
 	struct dev_pm_opp *opp_entry;
+	struct cpufreq_policy *policy;
+	unsigned long max_capacity, capacity;
 
 	val = readl_relaxed(hw->osm_hw_reg);
 	dcvsh_get_frequency(val, max_limit);
 	for_each_cpu(cpu, &hw->core_map) {
 		cpu_dev = get_cpu_device(cpu);
+		policy = cpufreq_cpu_get(cpu);
 		if (!cpu_dev) {
 			pr_err("Error in get CPU%d device\n",
 				cpumask_first(&hw->core_map));
@@ -193,6 +196,14 @@ static unsigned long limits_mitigation_notify(struct limits_dcvs_hw *hw)
 			continue;
 		}
 		max_limit = FREQ_HZ_TO_KHZ(freq_val);
+		max_capacity = arch_scale_cpu_capacity(NULL, cpu);
+		capacity = mult_frac(max_capacity, max_limit, policy->cpuinfo.max_freq);
+
+		/* Don't pass boost capacity to scheduler */
+		if (capacity > max_capacity)
+		capacity = max_capacity;
+		arch_set_thermal_pressure(policy->related_cpus,
+						max_capacity - capacity);
 		break;
 	}
 
