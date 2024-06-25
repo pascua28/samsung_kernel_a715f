@@ -1169,6 +1169,7 @@ config DEFAULT_USE_ENERGY_AWARE
 
 config SPRD_ROTATION_TASK
 	bool "Sprd rotation task"
+	default y
 	depends on SMP
 	help
 	  This option enables task rotation feature. In ARM big.little cpu
