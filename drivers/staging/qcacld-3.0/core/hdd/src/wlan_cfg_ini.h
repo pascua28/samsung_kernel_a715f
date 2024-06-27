@@ -132,5 +132,6 @@ static const char wlan_cfg[] __initconst = {
 	"enable_rtt_mac_randomization=1\n"
 	"gEnableConcurrentSTA=wlan1\n"
 	"gEnableSNRMonitoring=1\n"
+	"gOptimizedPowerManagement=1\n"
 	"END\n"
 };
