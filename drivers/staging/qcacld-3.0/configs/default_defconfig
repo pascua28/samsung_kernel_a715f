@@ -348,8 +348,8 @@ CONFIG_DP_TRACE := n
 ifeq ($(CONFIG_SLUB_DEBUG), y)
 	# Enable Obj Mgr Degug services if slub build
 	CONFIG_WLAN_OBJMGR_DEBUG:= y
-	CONFIG_MPC_UT_FRAMEWORK := y
-	CONFIG_LOCK_STATS_ON:= y
+	CONFIG_MPC_UT_FRAMEWORK := n
+	CONFIG_LOCK_STATS_ON:= n
 endif
 
 ifeq (y,$(findstring y,$(CONFIG_QCA_WIFI_SDIO) $(CONFIG_HIF_USB)))
@@ -442,7 +442,6 @@ CONFIG_QCA_WIFI_QCA8074 := y
 CONFIG_QCA_WIFI_QCA8074_VP := y
 CONFIG_DP_INTR_POLL_BASED := y
 CONFIG_TX_PER_PDEV_DESC_POOL := y
-CONFIG_DP_TRACE := y
 CONFIG_FEATURE_TSO := y
 CONFIG_FEATURE_FORCE_WAKE := y
 CONFIG_DP_LFR := y
@@ -465,30 +464,6 @@ endif
 ifeq ($(CONFIG_DISABLE_DP_STATS), y)
 	CONFIG_FEATURE_TSO_STATS := n
 endif
-endif
-
-# As per target team, build is done as follows:
-# Defconfig : build with default flags
-# Slub      : defconfig  + CONFIG_SLUB_DEBUG=y +
-#	      CONFIG_SLUB_DEBUG_ON=y + CONFIG_PAGE_POISONING=y
-# Perf      : Using appropriate msmXXXX-perf_defconfig
-#
-# Shipment builds (user variants) should not have any debug feature
-# enabled. This is identified using 'TARGET_BUILD_VARIANT'. Slub builds
-# are identified using the CONFIG_SLUB_DEBUG_ON configuration. Since
-# there is no other way to identify defconfig builds, QCOMs internal
-# representation of perf builds (identified using the string 'perf'),
-# is used to identify if the build is a slub or defconfig one. This
-# way no critical debug feature will be enabled for perf and shipment
-# builds. Other OEMs are also protected using the TARGET_BUILD_VARIANT
-# config.
-ifneq ($(TARGET_BUILD_VARIANT),user)
-	ifeq ($(CONFIG_LITHIUM), y)
-		CONFIG_FEATURE_PKTLOG := n
-	else
-		CONFIG_FEATURE_PKTLOG := y
-	endif
-	CONFIG_WLAN_DEBUG_CRASH_INJECT := y
 endif
 
 #Enable WLAN/Power debugfs feature only if debug_fs is enabled
@@ -781,7 +756,7 @@ CONFIG_QCA_SIGNED_SPLIT_BINARY_SUPPORT := n
 CONFIG_QCA_SINGLE_BINARY_SUPPORT := n
 
 #Enable collecting target RAM dump after kernel panic
-CONFIG_TARGET_RAMDUMP_AFTER_KERNEL_PANIC := y
+CONFIG_TARGET_RAMDUMP_AFTER_KERNEL_PANIC := n
 
 #Flag to enable/disable secure firmware feature
 CONFIG_FEATURE_SECURE_FIRMWARE := n
@@ -875,7 +850,7 @@ CONFIG_HDD_INIT_WITH_RTNL_LOCK := y
 CONFIG_WLAN_CONV_SPECTRAL_ENABLE := y
 CONFIG_WLAN_SPECTRAL_ENABLE := y
 CONFIG_WMI_CMD_STRINGS := y
-CONFIG_FEATURE_MONITOR_MODE_SUPPORT := y
+CONFIG_FEATURE_MONITOR_MODE_SUPPORT := n
 CONFIG_DESC_DUP_DETECT_DEBUG := n
 CONFIG_DEBUG_RX_RING_BUFFER := n
 CONFIG_WLAN_ALLOCATE_GLOBAL_BUFFERS_DYNAMICALLY := n
@@ -906,8 +881,6 @@ CONFIG_QCACLD_RX_DESC_MULTI_PAGE_ALLOC := y
 CONFIG_WMI_ROAM_SUPPORT := y
 CONFIG_WMI_CONCURRENCY_SUPPORT := y
 CONFIG_WMI_STA_SUPPORT := y
-
-CONFIG_DP_TRACE := y
 
 ifeq ($(CONFIG_HELIUMPLUS), y)
 ifneq ($(CONFIG_FORCE_ALLOC_FROM_DMA_ZONE), y)
@@ -976,11 +949,6 @@ ifeq ($(CONFIG_ARCH_SDXPRAIRIE), y)
 
 	CONFIG_DIRECT_BUF_RX_ENABLE := n
 	CONFIG_WMI_DBR_SUPPORT := n
-endif
-
-ifneq ($(TARGET_BUILD_VARIANT),user)
-CONFIG_DESC_DUP_DETECT_DEBUG := y
-CONFIG_DEBUG_RX_RING_BUFFER := y
 endif
 
 ifeq ($(CONFIG_CNSS), y)
