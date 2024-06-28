@@ -429,6 +429,9 @@ int irq_setup_affinity(struct irq_desc *desc)
 	if (cpumask_empty(&mask))
 		cpumask_copy(&mask, cpu_online_mask);
 
+	if (irqd_has_set(&desc->irq_data, IRQD_PERF_CRITICAL))
+		cpumask_copy(&mask, cpu_perf_mask);
+
 	if (node != NUMA_NO_NODE) {
 		const struct cpumask *nodemask = cpumask_of_node(node);
 
@@ -1199,8 +1202,13 @@ static void add_desc_to_perf_list(struct irq_desc *desc, unsigned int perf_flag)
 
 static void affine_one_perf_thread(struct irqaction *action)
 {
+	const struct cpumask *mask;
+
 	if (!action->thread)
 		return;
+
+	if (action->flags & IRQF_PERF_AFFINE)
+		mask = cpu_perf_mask;
 
 	if (action->flags & IRQF_PERF_FIRST_AFFINE)
 		mask = cpu_perf_first_mask;
@@ -1212,7 +1220,7 @@ static void affine_one_perf_thread(struct irqaction *action)
 		mask = cpu_lp_mask;
 
 	action->thread->flags |= PF_PERF_CRITICAL;
-	set_cpus_allowed_ptr(action->thread, cpu_perf_mask);
+	set_cpus_allowed_ptr(action->thread, mask);
 }
 
 static void unaffine_one_perf_thread(struct irqaction *action)
