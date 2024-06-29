@@ -666,15 +666,14 @@ static void fill_extra_arg(struct scm_desc *desc, struct scm_extra_arg *argbuf)
 
 static int __scm_call2(u32 fn_id, struct scm_desc *desc, bool retry)
 {
-	u8 buf[PAGE_SIZE + sizeof(struct scm_extra_arg)];
-	struct scm_extra_arg *extra_arg_buf = (void *)PAGE_ALIGN((unsigned long)buf);
+	struct scm_extra_arg extra_arg_buf __aligned(PAGE_SIZE);
 	int ret, retry_count = 0;
 	u64 x0;
 
 	if (unlikely(!is_scm_armv8()))
 		return -ENODEV;
 
-	fill_extra_arg(desc, extra_arg_buf);
+	fill_extra_arg(desc, &extra_arg_buf);
 
 	x0 = fn_id | scm_version_mask;
 
