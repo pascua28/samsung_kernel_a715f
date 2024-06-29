@@ -20,7 +20,6 @@
 #include <linux/uidgid.h>
 #include <linux/sched.h>
 #include <linux/sched/user.h>
-#include <linux/security.h>
 
 struct cred;
 struct inode;
