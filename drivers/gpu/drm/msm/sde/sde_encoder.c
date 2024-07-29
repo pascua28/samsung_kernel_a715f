@@ -1950,22 +1950,15 @@ static int _sde_encoder_update_rsc_client(
 		qsync_mode = sde_connector_get_qsync_mode(
 				sde_enc->cur_master->connector);
 
-	if (sde_encoder_in_clone_mode(drm_enc) ||
-		!disp_info->is_primary || (disp_info->is_primary &&
-			qsync_mode))
+	if (sde_encoder_in_clone_mode(drm_enc))
 		rsc_state = enable ? SDE_RSC_CLK_STATE :
 				SDE_RSC_IDLE_STATE;
-	else if (sde_encoder_check_curr_mode(drm_enc,
-			MSM_DISPLAY_CMD_MODE))
-		rsc_state = enable ? SDE_RSC_CMD_STATE :
-				SDE_RSC_IDLE_STATE;
-	else if (sde_encoder_check_curr_mode(drm_enc,
-			MSM_DISPLAY_VIDEO_MODE))
-		rsc_state = enable ? SDE_RSC_VID_STATE :
-				SDE_RSC_IDLE_STATE;
-
-	if (rsc_state == SDE_RSC_VID_STATE)
-		rsc_state = SDE_RSC_CLK_STATE;
+	else
+		rsc_state = enable ? ((disp_info->is_primary &&
+			(sde_encoder_check_curr_mode(drm_enc,
+			MSM_DISPLAY_CMD_MODE)) && !qsync_mode) ?
+			SDE_RSC_CMD_STATE : SDE_RSC_VID_STATE) :
+			SDE_RSC_IDLE_STATE;
 
 #if defined(CONFIG_DISPLAY_SAMSUNG_LEGO)
 	if (vdd->rsc_4_frame_idle && rsc_state == SDE_RSC_CMD_STATE)
