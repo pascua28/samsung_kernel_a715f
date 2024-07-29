@@ -42,10 +42,10 @@
 #define IS_SDM670_TARGET(rev) false
 #define IS_SM8150_TARGET(rev) false
 #define IS_SDMSHRIKE_TARGET(rev) false
-#define IS_SDMMAGPIE_TARGET(rev) false
+#define IS_SDMMAGPIE_TARGET(rev) true
 #define IS_SM6150_TARGET(rev) false
 #define IS_SDMTRINKET_TARGET(rev) false
-#define IS_ATOLL_TARGET(rev) true
+#define IS_ATOLL_TARGET(rev) false
 
 #define SDE_HW_BLK_NAME_LEN	16
 
