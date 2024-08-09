@@ -918,10 +918,6 @@ ifeq ($(cc-name),clang)
 KBUILD_CFLAGS   += -mllvm -regalloc-enable-advisor=release
 #Enable hot cold split optimization
 KBUILD_CFLAGS   += -mllvm -hot-cold-split=true
-
-KBUILD_CFLAGS  += -mllvm -inline-threshold=1300
-KBUILD_CFLAGS  += -mllvm -inlinehint-threshold=2000
-KBUILD_CFLAGS  += -mllvm -unroll-threshold=900
 endif
 
 ifdef CONFIG_LTO_CLANG
