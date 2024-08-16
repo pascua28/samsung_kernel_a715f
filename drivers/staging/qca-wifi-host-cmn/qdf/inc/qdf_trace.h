@@ -1079,6 +1079,7 @@ static inline
 int __printf(3, 4) qdf_snprintf(char *str_buffer, unsigned int size,
 				char *str_format, ...)
 {
+	return 0;
 }
 #endif
 

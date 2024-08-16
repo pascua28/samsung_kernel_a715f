@@ -339,6 +339,12 @@ static inline void qdf_vprint(const char *fmt, va_list args)
 }
 #endif
 
+#ifndef CONFIG_WLAN_DEBUG
+static inline void __qdf_bug(void)
+{
+}
+#endif
+
 #ifdef PANIC_ON_BUG
 #ifdef CONFIG_SLUB_DEBUG
 /**
