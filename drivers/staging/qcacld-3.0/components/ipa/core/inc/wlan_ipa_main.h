@@ -30,6 +30,8 @@
 #include <wlan_ipa_public_struct.h>
 #include <wlan_ipa_priv.h>
 
+#include <linux/ipa.h>
+
 #define ipa_fatal(params...) \
 	QDF_TRACE_FATAL(QDF_MODULE_ID_IPA, params)
 #define ipa_err(params...) \
@@ -504,14 +506,6 @@ void ipa_update_tx_stats(struct wlan_objmgr_pdev *pdev, uint64_t sta_tx,
  */
 void ipa_flush_pending_vdev_events(struct wlan_objmgr_pdev *pdev,
 				   uint8_t vdev_id);
-
-/**
- * ipa_is_ready() - Is IPA register callback is invoked
- *
- * Return: true if IPA register callback is invoked or false
- * otherwise
- */
-bool ipa_is_ready(void);
 
 /**
  * ipa_init_deinit_lock() - lock ipa init deinit lock
