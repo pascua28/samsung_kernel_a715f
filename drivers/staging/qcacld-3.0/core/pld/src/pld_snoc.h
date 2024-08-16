@@ -398,10 +398,5 @@ static inline int pld_snoc_idle_shutdown(struct device *dev)
 {
 	return icnss_idle_shutdown(dev);
 }
-
-static inline unsigned long pld_snoc_get_device_config(void)
-{
-	return icnss_get_device_config();
-}
 #endif
 #endif

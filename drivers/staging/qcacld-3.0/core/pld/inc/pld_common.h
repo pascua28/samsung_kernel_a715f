@@ -994,7 +994,7 @@ int pld_get_thermal_state(struct device *dev, unsigned long *thermal_state,
  */
 int pld_is_ipa_offload_disabled(struct device *dev);
 #else
-int pld_is_ipa_offload_disabled(struct device *dev);
+static inline int pld_is_ipa_offload_disabled(struct device *dev)
 {
 	return 0;
 }

@@ -3256,7 +3256,6 @@ int pld_is_ipa_offload_disabled(struct device *dev)
 
 	switch (type) {
 	case PLD_BUS_TYPE_SNOC:
-		dev_cfg = pld_snoc_get_device_config();
 		break;
 	case PLD_BUS_TYPE_IPCI:
 	case PLD_BUS_TYPE_PCIE:
