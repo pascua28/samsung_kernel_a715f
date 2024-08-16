@@ -88,7 +88,7 @@
 #ifdef CONFIG_LITHIUM
 #include <net/cnss2.h>
 #else
-#include <soc/qcom/icnss2.h>
+#include <soc/qcom/icnss.h>
 #endif
 #endif /* SEC_READ_MACADDR_SYSFS || SEC_WRITE_VERSION_IN_SYSFS || SEC_WRITE_SOFTAP_INFO_IN_SYSFS || SEC_CONFIG_PSM_SYSFS */
 
