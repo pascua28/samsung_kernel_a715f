@@ -212,7 +212,7 @@ void __iomem *msm_ioremap(struct platform_device *pdev, const char *name,
 		return ERR_PTR(-ENOMEM);
 	}
 
-	if (reglog)
+	if (unlikely(reglog))
 		dev_dbg(&pdev->dev, "IO:region %s %pK %08lx\n",
 			dbgname, ptr, size);
 
@@ -244,7 +244,7 @@ void msm_iounmap(struct platform_device *pdev, void __iomem *addr)
 
 void msm_writel(u32 data, void __iomem *addr)
 {
-	if (reglog)
+	if (unlikely(reglog))
 		pr_debug("IO:W %pK %08x\n", addr, data);
 	writel(data, addr);
 }
@@ -253,7 +253,7 @@ u32 msm_readl(const void __iomem *addr)
 {
 	u32 val = readl(addr);
 
-	if (reglog)
+	if (unlikely(reglog))
 		pr_err("IO:R %pK %08x\n", addr, val);
 	return val;
 }
