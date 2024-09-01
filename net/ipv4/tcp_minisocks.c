@@ -499,7 +499,10 @@ struct sock *tcp_create_openreq_child(const struct sock *sk,
 						       keepalive_time_when(newtp));
 
 		newtp->rx_opt.tstamp_ok = ireq->tstamp_ok;
-		newtp->rx_opt.sack_ok = ireq->sack_ok;
+		if ((newtp->rx_opt.sack_ok = ireq->sack_ok) != 0) {
+			if (sysctl_tcp_fack)
+				tcp_enable_fack(newtp);
+		}
 		newtp->window_clamp = req->rsk_window_clamp;
 		newtp->rcv_ssthresh = req->rsk_rcv_wnd;
 		newtp->rcv_wnd = req->rsk_rcv_wnd;
