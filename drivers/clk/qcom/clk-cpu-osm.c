@@ -110,11 +110,6 @@ static inline int clk_osm_read_reg(struct clk_osm *c, u32 offset)
 	return readl_relaxed(c->vbase + offset);
 }
 
-static inline int clk_osm_read_reg(struct clk_osm *c, u32 offset)
-{
-	return readl_relaxed(c->vbase + offset);
-}
-
 static inline int clk_osm_mb(struct clk_osm *c)
 {
 	return readl_relaxed(c->vbase + ENABLE_REG);
