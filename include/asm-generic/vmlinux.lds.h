@@ -822,15 +822,15 @@
 #ifdef CONFIG_DEFERRED_INITCALLS
 #define DEFERRED_INITCALLS(level)					\
 		VMLINUX_SYMBOL(__deferred_initcall_start) = .;		\
-		*(.deferred_initcall##level##.init)			\
-		*(.deferred_initcall##level##s.init)			\
+		KEEP(*(.deferred_initcall##level##.init))		\
+		KEEP(*(.deferred_initcall##level##s.init))		\
 		VMLINUX_SYMBOL(__deferred_initcall_end) = .;
 #endif
 
 #ifdef CONFIG_DEFERRED_INITCALLS
 #define INIT_CALLS							\
 		VMLINUX_SYMBOL(__initcall_start) = .;			\
-		*(.initcallearly.init)					\
+		KEEP(*(.initcallearly.init))				\
 		INIT_CALLS_LEVEL(0)					\
 		INIT_CALLS_LEVEL(1)					\
 		INIT_CALLS_LEVEL(2)					\
