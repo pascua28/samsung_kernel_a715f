@@ -422,7 +422,7 @@
 				/* LOW SVS */
 				qcom,gpu-pwrlevel@6 {
 					reg = <6>;
-					qcom,gpu-freq = <180000000>;
+					qcom,gpu-freq = <150000000>;
 					qcom,bus-freq = <4>;
 					qcom,bus-min = <3>;
 					qcom,bus-max = <4>;
