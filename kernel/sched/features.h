@@ -17,7 +17,7 @@
  * wakeup-preemption), since its likely going to consume data we
  * touched, increases cache locality.
  */
-#define SCHED_FEAT_NEXT_BUDDY 0
+#define SCHED_FEAT_NEXT_BUDDY 1
 
 /*
  * Prefer to schedule the task that ran last (when we did
@@ -30,7 +30,7 @@
  * skip buddy i.e task called yield() is always skipped and the
  * next entity is selected to run irrespective of the vruntime
  */
-#define SCHED_FEAT_STRICT_SKIP_BUDDY 1
+#define SCHED_FEAT_STRICT_SKIP_BUDDY 0
 
 /*
  * Consider buddies to be cache hot, decreases the likelyness of a
@@ -50,7 +50,7 @@
 /*
  * Decrement CPU capacity based on time not spent running tasks
  */
-#define SCHED_FEAT_NONTASK_CAPACITY 1
+#define SCHED_FEAT_NONTASK_CAPACITY 0
 
 /*
  * Queue remote wakeups on the target CPU and process them
@@ -134,4 +134,9 @@
  * If disabled, this behaviour will only apply to tasks of the
  * RT class.
  */
-#define SCHED_FEAT_SCHEDTUNE_BOOST_HOLD_ALL 0
+#define SCHED_FEAT_SCHEDTUNE_BOOST_HOLD_ALL 1
+
+/*
+ * Utilization clamping lazy update.
+ */
+#define SCHED_FEAT_UCLAMP_LAZY_UPDATE 0
