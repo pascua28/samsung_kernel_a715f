@@ -318,32 +318,16 @@ static const char *kgsl_sync_fence_driver_name(struct dma_fence *fence)
 
 static const char *kgsl_sync_timeline_name(struct dma_fence *fence)
 {
-	struct kgsl_sync_fence *kfence = (struct kgsl_sync_fence *)fence;
-	struct kgsl_sync_timeline *ktimeline = kfence->parent;
-
-	return ktimeline->name;
+	return "kgsl_sync_timeline";
 }
 
 int kgsl_sync_timeline_create(struct kgsl_context *context)
 {
 	struct kgsl_sync_timeline *ktimeline;
 
-	/*
-	 * Generate a name which includes the thread name, thread id, process
-	 * name, process id, and context id. This makes it possible to
-	 * identify the context of a timeline in the sync dump.
-	 */
-	char ktimeline_name[sizeof(ktimeline->name)] = {};
-
 	/* Put context when timeline is released */
 	if (!_kgsl_context_get(context))
 		return -ENOENT;
-
-	snprintf(ktimeline_name, sizeof(ktimeline_name),
-		"%s_%d-%.15s(%d)-%.15s(%d)",
-		context->device->name, context->id,
-		current->group_leader->comm, current->group_leader->pid,
-		current->comm, current->pid);
 
 	ktimeline = kzalloc(sizeof(*ktimeline), GFP_KERNEL);
 	if (ktimeline == NULL) {
@@ -352,7 +336,6 @@ int kgsl_sync_timeline_create(struct kgsl_context *context)
 	}
 
 	kref_init(&ktimeline->kref);
-	strlcpy(ktimeline->name, ktimeline_name, KGSL_TIMELINE_NAME_LEN);
 	ktimeline->fence_context = dma_fence_context_alloc(1);
 	ktimeline->last_timestamp = 0;
 	INIT_LIST_HEAD(&ktimeline->child_list_head);
