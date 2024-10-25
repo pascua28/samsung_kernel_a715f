@@ -3979,10 +3979,8 @@ static int __init rcu_spawn_gp_kthread(void)
 		rnp = rcu_get_root(rsp);
 		raw_spin_lock_irqsave_rcu_node(rnp, flags);
 		rsp->gp_kthread = t;
-		if (kthread_prio) {
-			sp.sched_priority = kthread_prio;
-			sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
-		}
+		if (kthread_prio)
+			sched_set_fifo_low(t);
 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
 		wake_up_process(t);
 	}
