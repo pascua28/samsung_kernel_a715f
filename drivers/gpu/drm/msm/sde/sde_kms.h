@@ -46,24 +46,21 @@
  * SDE_DEBUG - macro for kms/plane/crtc/encoder/connector logs
  * @fmt: Pointer to format string
  */
-#define SDE_DEBUG(fmt, ...)                                                \
-	no_printk(fmt, ##__VA_ARGS__)
+static inline void SDE_DEBUG(const char *fmt, ...) {}
 
 /**
  * SDE_INFO - macro for kms/plane/crtc/encoder/connector logs
  * @fmt: Pointer to format string
  */
-#define SDE_INFO(fmt, ...)                                                \
-	no_printk(fmt, ##__VA_ARGS__)
+static inline void SDE_INFO(const char *fmt, ...) {}
 
 /**
  * SDE_DEBUG_DRIVER - macro for hardware driver logging
  * @fmt: Pointer to format string
  */
-#define SDE_DEBUG_DRIVER(fmt, ...)                                         \
-	no_printk(fmt, ##__VA_ARGS__)
+static inline void SDE_DEBUG_DRIVER(const char *fmt, ...) {}
 
-#define SDE_ERROR(fmt, ...) pr_err("[sde error]" fmt, ##__VA_ARGS__)
+static inline void SDE_ERROR(const char *fmt, ...) {}
 
 #define POPULATE_RECT(rect, a, b, c, d, Q16_flag) \
 	do {						\
