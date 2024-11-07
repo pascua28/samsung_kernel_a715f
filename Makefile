@@ -1024,7 +1024,9 @@ LDFLAGS_vmlinux	+= $(call ld-option, -X,)
 endif
 
 ifeq ($(CONFIG_RELR),y)
+ifneq ($(LLVM),)
 LDFLAGS_vmlinux	+= --pack-dyn-relocs=relr
+endif
 endif
 
 USE_SECGETSPF := $(shell echo $(PATH))
