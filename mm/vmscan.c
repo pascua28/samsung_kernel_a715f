@@ -3821,20 +3821,6 @@ static void kswapd_try_to_sleep(pg_data_t *pgdat, int alloc_order, int reclaim_o
 	finish_wait(&pgdat->kswapd_wait, &wait);
 }
 
-#if CONFIG_KSWAPD_CPU
-static struct cpumask kswapd_cpumask;
-static void init_kswapd_cpumask(void)
-{
-	int i;
-
-	cpumask_clear(&kswapd_cpumask);
-	for (i = 0; i < nr_cpu_ids; i++) {
-		if (CONFIG_KSWAPD_CPU & (1 << i))
-			cpumask_set_cpu(i, &kswapd_cpumask);
-	}
-}
-#endif
-
 /*
  * The background pageout daemon, started as a kernel thread
  * from the init process.
@@ -3858,11 +3844,7 @@ static int kswapd(void *p)
 	struct reclaim_state reclaim_state = {
 		.reclaimed_slab = 0,
 	};
-#if CONFIG_KSWAPD_CPU
-	const struct cpumask *cpumask = &kswapd_cpumask;
-#else
 	const struct cpumask *cpumask = cpumask_of_node(pgdat->node_id);
-#endif
 
 	if (!cpumask_empty(cpumask))
 		set_cpus_allowed_ptr(tsk, cpumask);
@@ -4026,11 +4008,7 @@ static int kswapd_cpu_online(unsigned int cpu)
 		pg_data_t *pgdat = NODE_DATA(nid);
 		const struct cpumask *mask;
 
-#if CONFIG_KSWAPD_CPU
-		mask = &kswapd_cpumask;
-#else
 		mask = cpumask_of_node(pgdat->node_id);
-#endif
 
 		if (cpumask_any_and(cpu_online_mask, mask) < nr_cpu_ids)
 			/* One of our CPUs online: restore mask */
@@ -4079,10 +4057,6 @@ void kswapd_stop(int nid)
 static int __init kswapd_init(void)
 {
 	int nid, ret;
-
-#if CONFIG_KSWAPD_CPU
-	init_kswapd_cpumask();
-#endif
 
 	swap_setup();
 	for_each_node_state(nid, N_MEMORY)
