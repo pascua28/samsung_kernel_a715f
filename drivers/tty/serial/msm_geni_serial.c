@@ -3306,9 +3306,11 @@ static void msm_geni_serial_debug_init(struct uart_port *uport, bool console)
 	char name[30];
 #endif
 
+#ifdef CONFIG_DEBUG_FS
 	msm_port->dbg = debugfs_create_dir(dev_name(uport->dev), NULL);
 	if (IS_ERR_OR_NULL(msm_port->dbg))
 		dev_err(uport->dev, "Failed to create dbg dir\n");
+#endif
 
 #ifdef CONFIG_IPC_LOGGING
 	if (!console) {
