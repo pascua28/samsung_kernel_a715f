@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2014-2020 The Linux Foundation. All rights reserved.
  *
  * Permission to use, copy, modify, and/or distribute this software for
  * any purpose with or without fee is hereby granted, provided that the
@@ -182,16 +182,12 @@ int qdf_wake_up_process(qdf_thread_t *thread)
 }
 qdf_export_symbol(qdf_wake_up_process);
 
-/* save_stack_trace_tsk() is exported in debug version for:
+/* save_stack_trace_tsk() is exported for:
  * 1) non-arm architectures
  * 2) arm architectures in kernel versions >=4.14
  * 3) backported kernels defining BACKPORTED_EXPORT_SAVE_STACK_TRACE_TSK_ARM
  */
-#if (defined(WLAN_DEBUG) && \
-        (defined(WLAN_HOST_ARCH_ARM) && !WLAN_HOST_ARCH_ARM) || \
-	LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0) || \
-	defined(BACKPORTED_EXPORT_SAVE_STACK_TRACE_TSK_ARM)) && \
-	defined(CONFIG_STACKTRACE) && !defined(CONFIG_ARCH_STACKWALK)
+#if defined(BUILD_DEBUG_VERSION)
 #define QDF_PRINT_TRACE_COUNT 32
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 2, 0))
@@ -230,7 +226,7 @@ void qdf_print_thread_trace(qdf_thread_t *thread)
 
 #else
 void qdf_print_thread_trace(qdf_thread_t *thread) { }
-#endif
+#endif /* KERNEL_VERSION(4, 14, 0) */
 qdf_export_symbol(qdf_print_thread_trace);
 
 qdf_thread_t *qdf_get_current_task(void)
@@ -279,3 +275,18 @@ void qdf_cpumask_setall(qdf_cpu_mask *dstp)
 }
 
 qdf_export_symbol(qdf_cpumask_setall);
+
+bool qdf_cpumask_empty(const struct cpumask *srcp)
+{
+	return cpumask_empty(srcp);
+}
+
+qdf_export_symbol(qdf_cpumask_empty);
+
+void qdf_cpumask_copy(struct cpumask *dstp,
+		      const struct cpumask *srcp)
+{
+	return cpumask_copy(dstp, srcp);
+}
+
+qdf_export_symbol(qdf_cpumask_copy);

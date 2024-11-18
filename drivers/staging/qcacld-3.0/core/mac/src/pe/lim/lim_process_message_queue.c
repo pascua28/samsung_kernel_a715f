@@ -133,8 +133,8 @@ static void lim_process_sae_msg_ap(struct mac_context *mac,
 
 	if (!sta_pre_auth_ctx) {
 		pe_debug("No preauth node created for "
-			 QDF_MAC_ADDR_STR,
-			 QDF_MAC_ADDR_ARRAY(sae_msg->peer_mac_addr));
+			 QDF_MAC_ADDR_FMT,
+			 QDF_MAC_ADDR_REF(sae_msg->peer_mac_addr));
 		return;
 	}
 
@@ -142,8 +142,8 @@ static void lim_process_sae_msg_ap(struct mac_context *mac,
 
 	if (sae_msg->sae_status != IEEE80211_STATUS_SUCCESS) {
 		pe_debug("SAE authentication failed for "
-			 QDF_MAC_ADDR_STR " status: %u",
-			 QDF_MAC_ADDR_ARRAY(sae_msg->peer_mac_addr),
+			 QDF_MAC_ADDR_FMT " status: %u",
+			 QDF_MAC_ADDR_REF(sae_msg->peer_mac_addr),
 			 sae_msg->sae_status);
 		if (assoc_req->present) {
 			pe_debug("Assoc req cached; clean it up");
@@ -215,9 +215,9 @@ static void lim_process_sae_msg(struct mac_context *mac, struct sir_sae_msg *bod
 	}
 
 	pe_debug("SAE:status %d limMlmState %d opmode %d peer: "
-		 QDF_MAC_ADDR_STR, sae_msg->sae_status,
+		 QDF_MAC_ADDR_FMT, sae_msg->sae_status,
 		 session->limMlmState, session->opmode,
-		 QDF_MAC_ADDR_ARRAY(sae_msg->peer_mac_addr));
+		 QDF_MAC_ADDR_REF(sae_msg->peer_mac_addr));
 	if (LIM_IS_STA_ROLE(session))
 		lim_process_sae_msg_sta(mac, session, sae_msg);
 	else if (LIM_IS_AP_ROLE(session))
@@ -1781,6 +1781,7 @@ static void lim_process_messages(struct mac_context *mac_ctx,
 	case WNI_SME_UPDATE_MU_EDCA_PARAMS:
 	case eWNI_SME_UPDATE_SESSION_EDCA_TXQ_PARAMS:
 	case WNI_SME_CFG_ACTION_FRM_HE_TB_PPDU:
+	case WNI_SME_REGISTER_BCN_REPORT_SEND_CB:
 		/* These messages are from HDD.No need to respond to HDD */
 		lim_process_normal_hdd_msg(mac_ctx, msg, false);
 		break;
@@ -1812,9 +1813,9 @@ static void lim_process_messages(struct mac_context *mac_ctx,
 					     msg->bodyptr,
 					     sizeof(tSirP2PNoaAttr));
 				pe_debug("bssId"
-					 QDF_MAC_ADDR_STR
+					 QDF_MAC_ADDR_FMT
 					 " ctWin=%d oppPsFlag=%d",
-					 QDF_MAC_ADDR_ARRAY(session_entry->bssId),
+					 QDF_MAC_ADDR_REF(session_entry->bssId),
 					 session_entry->p2pGoPsUpdate.ctWin,
 					 session_entry->p2pGoPsUpdate.oppPsFlag);
 				pe_debug("uNoa1IntervalCnt=%d uNoa1Duration=%d uNoa1Interval=%d uNoa1StartTime=%d",

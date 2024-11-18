@@ -1095,7 +1095,7 @@ void qdf_trace_display(void)
 
 static inline
 void __printf(3, 4) qdf_snprintf(char *str_buffer, unsigned int size,
-				char *str_format, ...)
+		  char *str_format, ...)
 {
 }
 #endif
@@ -1225,8 +1225,7 @@ qdf_tso_seg_dbg_zero(struct qdf_tso_seg_elem_t *tsoseg)
 
 #endif /* TSOSEG_DEBUG */
 
-#ifdef QDF_ENABLE_TRACING
-#ifdef WLAN_DEBUG
+#if 0
 /**
  * qdf_trace_hex_dump() - externally called hex dump function
  * @module: Module identifier a member of the QDF_MODULE_ID enumeration that
@@ -1244,13 +1243,13 @@ qdf_tso_seg_dbg_zero(struct qdf_tso_seg_elem_t *tsoseg)
 void qdf_trace_hex_dump(QDF_MODULE_ID module, QDF_TRACE_LEVEL level,
 			void *data, int buf_len);
 #else
-static inline
-void qdf_trace_hex_dump(QDF_MODULE_ID module, QDF_TRACE_LEVEL level,
+static inline void qdf_trace_hex_dump(QDF_MODULE_ID module, QDF_TRACE_LEVEL level,
 			void *data, int buf_len)
 {
 }
 #endif
 
+#if 0
 /**
  * qdf_trace_hex_ascii_dump() - externally called hex and ascii dump function
  * @module: Module identifier a member of the QDF_MODULE_ID enumeration that
@@ -1268,10 +1267,10 @@ void qdf_trace_hex_dump(QDF_MODULE_ID module, QDF_TRACE_LEVEL level,
 void qdf_trace_hex_ascii_dump(QDF_MODULE_ID module, QDF_TRACE_LEVEL level,
 			      void *data, int buf_len);
 #else
-static inline void qdf_trace_hex_dump(QDF_MODULE_ID module, QDF_TRACE_LEVEL level,
-			void *data, int buf_len) {}
 static inline void qdf_trace_hex_ascii_dump(QDF_MODULE_ID module, QDF_TRACE_LEVEL level,
-			      void *data, int buf_len) {}
+			      void *data, int buf_len)
+{
+}
 #endif
 
 #define ERROR_CODE                      -1
@@ -1596,9 +1595,8 @@ QDF_STATUS qdf_print_set_category_verbose(unsigned int idx,
 }
 
 static inline
-bool qdf_log_dump_at_kernel_level(bool enable)
+void qdf_log_dump_at_kernel_level(bool enable)
 {
-	return false;
 }
 
 static inline

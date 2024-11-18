@@ -538,7 +538,7 @@ error:
 	return status;
 }
 
-void wlan_serialization_generic_timer_cb(void *arg)
+QDF_STATUS wlan_serialization_generic_timer_cb(void *arg)
 {
 	struct wlan_serialization_timer *timer = arg;
 	struct wlan_serialization_command *cmd = timer->cmd;
@@ -548,13 +548,13 @@ void wlan_serialization_generic_timer_cb(void *arg)
 
 	if (!cmd) {
 		ser_err("Command not found");
-		return;
+		return QDF_STATUS_E_FAILURE;
 	}
 
 	vdev = cmd->vdev;
 	if (!vdev) {
 		ser_err("Invalid vdev");
-		return;
+		return QDF_STATUS_E_FAILURE;
 	}
 
 	ser_err("Active cmd timeout for cmd_type[%d] vdev[%d]",
@@ -572,6 +572,8 @@ void wlan_serialization_generic_timer_cb(void *arg)
 	/* Release the ref taken before the timer was started */
 	if (status == WLAN_SER_CMD_IN_ACTIVE_LIST)
 		wlan_objmgr_vdev_release_ref(vdev, WLAN_SERIALIZATION_ID);
+
+	return QDF_STATUS_SUCCESS;
 }
 
 static QDF_STATUS wlan_serialization_mc_flush_noop(struct scheduler_msg *msg)
@@ -586,15 +588,7 @@ wlan_serialization_timer_cb_mc_ctx(void *arg)
 
 	msg.type = SYS_MSG_ID_MC_TIMER;
 	msg.reserved = SYS_MSG_COOKIE;
-
-	/* msg.callback will explicitly cast back to qdf_mc_timer_callback_t
-	 * in scheduler_timer_q_mq_handler.
-	 * but in future we do not want to introduce more this kind of
-	 * typecast by properly using QDF MC timer for MCC from get go in
-	 * common code.
-	 */
-	msg.callback =
-		(scheduler_msg_process_fn_t)wlan_serialization_generic_timer_cb;
+	msg.callback = wlan_serialization_generic_timer_cb;
 	msg.bodyptr = arg;
 	msg.bodyval = 0;
 	msg.flush_callback = wlan_serialization_mc_flush_noop;

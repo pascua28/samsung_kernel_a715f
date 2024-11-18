@@ -1703,7 +1703,6 @@ void dfs_print_filter(struct wlan_dfs *dfs,
 static inline void dfs_print_filter(struct wlan_dfs *dfs,
 		struct dfs_filter *rf) {}
 #endif
-
 /**
  * dfs_getchanstate() - Get chan state.
  * @dfs: Pointer to wlan_dfs structure.

@@ -696,8 +696,8 @@ static void wma_process_send_addba_req(tp_wma_handle wma_handle,
 	if (QDF_STATUS_SUCCESS != status) {
 		WMA_LOGE(FL("Failed to process WMA_SEND_ADDBA_REQ"));
 	}
-	wma_debug("sent ADDBA req to" QDF_MAC_ADDR_STR "tid %d buff_size %d",
-			QDF_MAC_ADDR_ARRAY(send_addba->mac_addr),
+	wma_debug("sent ADDBA req to" QDF_MAC_ADDR_FMT "tid %d buff_size %d",
+			QDF_MAC_ADDR_REF(send_addba->mac_addr),
 			send_addba->param.tidno,
 			send_addba->param.buffersize);
 
@@ -1535,17 +1535,15 @@ QDF_STATUS wma_process_hal_pwr_dbg_cmd(WMA_HANDLE handle,
 	return status;
 }
 
-static QDF_STATUS wma_discard_fw_event(struct scheduler_msg *msg)
+static void wma_discard_fw_event(struct scheduler_msg *msg)
 {
 	if (!msg->bodyptr)
-		return QDF_STATUS_E_INVAL;
+		return;
 
 	qdf_mem_free(msg->bodyptr);
 	msg->bodyptr = NULL;
 	msg->bodyval = 0;
 	msg->type = 0;
-
-	return QDF_STATUS_SUCCESS;
 }
 
 QDF_STATUS
@@ -3517,6 +3515,7 @@ void wma_send_msg_by_priority(tp_wma_handle wma_handle, uint16_t msg_type,
 	if (!QDF_IS_STATUS_SUCCESS(status)) {
 		if (body_ptr)
 			qdf_mem_free(body_ptr);
+		wma_err("Failed to send msg");
 	}
 }
 
@@ -3551,8 +3550,8 @@ static int wma_set_base_macaddr_indicate(tp_wma_handle wma_handle,
 				     (uint8_t *)customAddr);
 	if (err)
 		return -EIO;
-	wma_debug("Base MAC Addr: " QDF_MAC_ADDR_STR,
-		 QDF_MAC_ADDR_ARRAY((*customAddr)));
+	wma_debug("Base MAC Addr: " QDF_MAC_ADDR_FMT,
+		 QDF_MAC_ADDR_REF((*customAddr)));
 
 	return 0;
 }

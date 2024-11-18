@@ -1077,10 +1077,8 @@ void sch_send_beacon_report(struct mac_context *mac_ctx,
 			    struct pe_session *session)
 {
 	struct wlan_beacon_report beacon_report;
-	beacon_report_cb sme_bcn_cb;
 
-	sme_bcn_cb = mac_ctx->lim.sme_bcn_rcv_callback;
-	if (!sme_bcn_cb)
+	if (!mac_ctx->lim.sme_bcn_rcv_callback)
 		return;
 
 	if (!LIM_IS_STA_ROLE(session))
@@ -1108,7 +1106,8 @@ void sch_send_beacon_report(struct mac_context *mac_ctx,
 		beacon_report.vdev_id = session->vdev_id;
 
 		/* Send report to upper layer */
-		sme_bcn_cb(mac_ctx->hdd_handle, &beacon_report);
+		mac_ctx->lim.sme_bcn_rcv_callback(mac_ctx->hdd_handle,
+						  &beacon_report);
 	}
 }
 
@@ -1547,10 +1546,10 @@ QDF_STATUS lim_process_obss_detection_ind(struct mac_context *mac_ctx,
 	enum reg_wifi_band rf_band = REG_BAND_UNKNOWN;
 	struct obss_detection_cfg *cur_detect;
 
-	pe_debug("obss detect ind id %d, reason %d, msk 0x%x, " QDF_MAC_ADDR_STR,
+	pe_debug("obss detect ind id %d, reason %d, msk 0x%x, " QDF_MAC_ADDR_FMT,
 		 obss_detection->vdev_id, obss_detection->reason,
 		 obss_detection->matched_detection_masks,
-		 QDF_MAC_ADDR_ARRAY(obss_detection->matched_bssid_addr));
+		 QDF_MAC_ADDR_REF(obss_detection->matched_bssid_addr));
 
 	session = pe_find_session_by_vdev_id(mac_ctx, obss_detection->vdev_id);
 	if (!session) {

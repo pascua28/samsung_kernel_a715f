@@ -92,7 +92,8 @@ typedef uint8_t tSirVersionString[SIR_VERSION_STRING_LEN];
 
 #define MAX_POWER_DBG_ARGS_SUPPORTED 8
 #define QOS_MAP_MAX_EX  21
-#define QOS_MAP_LEN_MIN 16
+#define QOS_MAP_RANGE_NUM 8
+#define QOS_MAP_LEN_MIN (QOS_MAP_RANGE_NUM * 2)
 #define QOS_MAP_LEN_MAX \
 	(QOS_MAP_LEN_MIN + 2 * QOS_MAP_MAX_EX)
 #define NUM_CHAINS_MAX  2
@@ -390,92 +391,16 @@ typedef struct sSirSmeRsp {
 	struct wlan_objmgr_psoc *psoc;
 } tSirSmeRsp, *tpSirSmeRsp;
 
-struct bss_description;
-struct roam_offload_synch_ind;
-struct roam_pmkid_req_event;
-
-/**
- * typedef csr_roam_synch_fn_t - CSR roam synch callback routine pointer
- * @mac: Global MAC context
- * @roam_synch_data: Structure with roam synch parameters
- * @bss_desc_ptr: BSS descriptor pointer
- * @reason: Reason for calling the callback
- *
- * This type is for callbacks registered with WMA and used after roaming
- * in firmware. The call to this routine completes the roam synch
- * propagation at both CSR and HDD levels. The HDD level propagation
- * is achieved through the already defined callback for assoc completion
- * handler.
- *
- * Return: Success or Failure.
- */
-typedef QDF_STATUS
-(*csr_roam_synch_fn_t)(struct mac_context *mac,
-		       struct roam_offload_synch_ind *roam_synch_data,
-		       struct bss_description *bss_desc_ptr,
-		       enum sir_roam_op_code reason);
-
-/**
- * typedef pe_roam_synch_fn_t - PE roam synch callback routine pointer
- * @mac_ctx: Global MAC context
- * @roam_sync_ind_ptr: Structure with roam synch parameters
- * @bss_desc_ptr: bss_description pointer for new bss to which the firmware has
- * started roaming
- * @reason: Reason for calling the callback
- *
- * This type is for callbacks registered with WMA to complete the roam synch
- * propagation at PE level. It also fills the BSS descriptor, which will be
- * helpful to complete the roam synch propagation.
- *
- * Return: Success or Failure.
- */
-typedef QDF_STATUS
-(*pe_roam_synch_fn_t)(struct mac_context *mac_ctx,
-		      struct roam_offload_synch_ind *roam_sync_ind_ptr,
-		      struct bss_description *bss_desc_ptr,
-		      enum sir_roam_op_code reason);
-
-/**
- * typedef stop_roaming_fn_t - Stop roaming routine pointer
- * @mac_handle: Pointer to opaque mac handle
- * @session_id: Session Identifier
- * @reason: Reason for calling the callback
- * @requestor: Requestor for disabling roaming in driver
- *
- * This type is for callbacks registered with WMA to stop roaming on the given
- * session ID
- *
- * Return: Success or Failure.
- */
-typedef QDF_STATUS
-(*stop_roaming_fn_t)(mac_handle_t mac_handle,
-		     uint8_t session_id, uint8_t reason,
-		     uint32_t requestor);
-
-/**
- * typedef csr_roam_pmkid_req_fn_t - pmkid generation fallback event pointer
- * @vdev_id: Vdev id
- * @bss_list: candidate AP bssid list
- *
- * This type is for callbacks registered with CSR to handle roam event from
- * firmware for pmkid generation fallback
- *
- * Return: Success or Failure.
- */
-typedef QDF_STATUS
-(*csr_roam_pmkid_req_fn_t)(uint8_t vdev_id,
-			   struct roam_pmkid_req_event *bss_list);
-
 /* / Definition for indicating all modules ready on STA */
 struct sme_ready_req {
 	uint16_t messageType;   /* eWNI_SME_SYS_READY_IND */
 	uint16_t length;
-	csr_roam_synch_fn_t csr_roam_synch_cb;
+	void *csr_roam_synch_cb;
 	QDF_STATUS (*csr_roam_auth_event_handle_cb)(struct mac_context *mac,
 						    uint8_t vdev_id,
 						    struct qdf_mac_addr bssid);
-	pe_roam_synch_fn_t pe_roam_synch_cb;
-	stop_roaming_fn_t stop_roaming_cb;
+	void *pe_roam_synch_cb;
+	void *stop_roaming_cb;
 	QDF_STATUS (*sme_msg_cb)(struct mac_context *mac,
 				 struct scheduler_msg *msg);
 	QDF_STATUS (*pe_disconnect_cb) (struct mac_context *mac,
@@ -483,7 +408,7 @@ struct sme_ready_req {
 					uint8_t *deauth_disassoc_frame,
 					uint16_t deauth_disassoc_frame_len,
 					uint16_t reason_code);
-	csr_roam_pmkid_req_fn_t csr_roam_pmkid_req_cb;
+	void *csr_roam_pmkid_req_cb;
 };
 
 /**
@@ -1389,6 +1314,18 @@ struct deauth_req {
 	uint16_t reasonCode;
 };
 
+/**
+ * struct deauth_retry_params - deauth retry params
+ * @peer_mac: peer mac
+ * @reason_code: reason for disconnect indication
+ * @retry_cnt: retry count
+ */
+struct deauth_retry_params {
+	struct qdf_mac_addr peer_macaddr;
+	uint16_t reason_code;
+	uint8_t retry_cnt;
+};
+
 /* / Definition for Deauthetication response */
 struct deauth_rsp {
 	uint16_t messageType;   /* eWNI_SME_DEAUTH_RSP */
@@ -1681,8 +1618,8 @@ typedef struct sSirAggrQosRsp {
 struct qos_map_set {
 	uint8_t present;
 	uint8_t num_dscp_exceptions;
-	uint8_t dscp_exceptions[21][2];
-	uint8_t dscp_range[8][2];
+	uint8_t dscp_exceptions[QOS_MAP_MAX_EX][2];
+	uint8_t dscp_range[QOS_MAP_RANGE_NUM][2];
 };
 
 typedef struct sSmeIbssPeerInd {
@@ -2179,6 +2116,9 @@ typedef enum {
  * @bg_scan_bad_rssi_thresh:    Bad RSSI threshold to perform bg scan.
  * @bad_rssi_thresh_offset_2g:  Offset from Bad RSSI threshold for 2G to 5G Roam
  * @bg_scan_client_bitmap:      Bitmap to identify the client scans to snoop.
+ * @roam_data_rssi_threshold_triggers:    Bad data RSSI threshold to roam
+ * @roam_data_rssi_threshold:    Bad data RSSI threshold to roam
+ * @rx_data_inactivity_time:    rx duration to check data RSSI
  *
  * This structure holds all the key parameters related to
  * initial connection and also roaming connections.
@@ -2212,6 +2152,9 @@ struct roam_ext_params {
 	int8_t bg_scan_bad_rssi_thresh;
 	uint8_t roam_bad_rssi_thresh_offset_2g;
 	uint32_t bg_scan_client_bitmap;
+	uint32_t roam_data_rssi_threshold_triggers;
+	int32_t roam_data_rssi_threshold;
+	uint32_t rx_data_inactivity_time;
 };
 
 /**
