@@ -254,7 +254,8 @@ static void balance_irqs(void)
 		bd->intrs += bi->delta_nr;
 
 		/* Consider this IRQ for balancing if it's movable */
-		if (!__irq_can_set_affinity(bi->desc)) {
+		if (!__irq_can_set_affinity(bi->desc) || (bi->desc->action && bi->desc->action->name &&
+				strstr(bi->desc->action->name, "WLAN_CE"))) {
 			if (sbalance_debug) {
 				if (bi->desc->action && bi->desc->action->name)
 					pr_info("IRQ%d (%s) unmovable\n",
