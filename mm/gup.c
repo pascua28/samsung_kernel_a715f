@@ -993,7 +993,7 @@ retry:
 			break;
 		}
 
-		ret = down_read_killable(&mm->mmap_sem);
+		ret = down_read_trylock(&mm->mmap_sem);
 		if (ret) {
 			BUG_ON(ret > 0);
 			if (!pages_done)
