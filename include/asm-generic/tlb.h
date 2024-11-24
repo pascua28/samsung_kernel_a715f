@@ -183,10 +183,6 @@ extern void tlb_remove_table(struct mmu_gather *tlb, void *table);
 
 void tlb_remove_table_sync_one(void);
 
-#else
-
-static inline void tlb_remove_table_sync_one(void) { }
-
 #else /* !CONFIG_MMU_GATHER_HAVE_TABLE_FREE */
 /*
  * Without MMU_GATHER_TABLE_FREE the architecture is assumed to have page based
@@ -209,6 +205,7 @@ static inline void tlb_remove_table_sync_one(void) { }
 
 #endif
 
+static inline void tlb_remove_table_sync_one(void) { }
 #endif /* CONFIG_MMU_GATHER_RCU_TABLE_FREE */
 
 #ifndef CONFIG_MMU_GATHER_NO_GATHER
