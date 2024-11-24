@@ -7,6 +7,7 @@ mount -t tmpfs nodev /dev/ep
 cat /system/build.prop > /dev/ep/build.prop
 echo "
 persist.sys.fuse.passthrough.enable=true
+ro.dalvik.vm.enable_uffd_gc=true
 " >> /dev/ep/build.prop
 chmod 600 /dev/ep/build.prop
 mount --bind /dev/ep/build.prop /system/build.prop
