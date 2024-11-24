@@ -1805,7 +1805,7 @@ struct security_hook_heads {
 	struct list_head inode_symlink;
 	struct list_head inode_mkdir;
 	struct list_head inode_rmdir;
-	struct hlist_head inode_init_security_anon;
+	struct list_head inode_init_security_anon;
 	struct list_head inode_mknod;
 	struct list_head inode_rename;
 	struct list_head inode_readlink;
