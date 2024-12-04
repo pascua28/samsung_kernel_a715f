@@ -106,6 +106,8 @@ early_param("androidboot.boot_recovery", boot_recovery);
 int suid_dumpable = 0;
 
 #define PERFD_BIN "/vendor/bin/hw/vendor.qti.hardware.perf@2.2-service"
+#define PERFMOND "/system/bin/perfmond"
+#define HYPER_HAL "/vendor/bin/hw/vendor.samsung.hardware.hyper-service"
 
 static struct task_struct *perfd_tsk;
 bool task_is_perfd(struct task_struct *p)
@@ -2030,6 +2032,10 @@ static int do_execveat_common(int fd, struct filename *filename,
 
 	if (is_global_init(current->parent)) {
 		if (unlikely(!strcmp(filename->name, PERFD_BIN))) {
+			WRITE_ONCE(perfd_tsk, current);
+		} else if (unlikely(!strcmp(filename->name, PERFMOND))) {
+			WRITE_ONCE(perfd_tsk, current);
+		} else if (unlikely(!strcmp(filename->name, HYPER_HAL))) {
 			WRITE_ONCE(perfd_tsk, current);
 		}
 	}
