@@ -277,6 +277,7 @@ static void balance_irqs(void)
 			continue;
 		}
 
+		bd = per_cpu_ptr(&balance_data, cpu);
 		list_add_tail(&bi->move_node, &bd->movable_irqs);
 	}
 
