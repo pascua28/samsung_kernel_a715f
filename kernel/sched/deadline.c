@@ -1653,6 +1653,8 @@ static struct sched_dl_entity *pick_next_dl_entity(struct rq *rq,
 	return rb_entry(left, struct sched_dl_entity, rb_node);
 }
 
+extern int update_dl_rq_load_avg(u64 now, int cpu, struct rq *rq, int running);
+
 static struct task_struct *
 pick_next_task_dl(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
 {
@@ -1707,12 +1709,17 @@ pick_next_task_dl(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
 
 	queue_push_tasks(rq);
 
+	if (rq->curr->sched_class != &dl_sched_class)
+		update_dl_rq_load_avg(rq_clock_task(rq), rq->cpu, rq, 0);
+
 	return p;
 }
 
 static void put_prev_task_dl(struct rq *rq, struct task_struct *p)
 {
 	update_curr_dl(rq);
+
+	update_dl_rq_load_avg(rq_clock_task(rq), rq->cpu, rq, 1);
 
 	if (on_dl_rq(&p->dl) && p->nr_cpus_allowed > 1)
 		enqueue_pushable_dl_task(rq, p);
@@ -1721,6 +1728,8 @@ static void put_prev_task_dl(struct rq *rq, struct task_struct *p)
 static void task_tick_dl(struct rq *rq, struct task_struct *p, int queued)
 {
 	update_curr_dl(rq);
+
+	update_dl_rq_load_avg(rq_clock_task(rq), rq->cpu, rq, 1);
 
 	/*
 	 * Even when we have runtime, update_curr_dl() might have resulted in us
