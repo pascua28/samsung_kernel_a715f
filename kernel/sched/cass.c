@@ -50,12 +50,17 @@ void cass_cpu_util(struct cass_cpu_cand *c, bool sync)
 		}
 	}
 
-	/*
-	 * Get the current capacity of this CPU adjusted for thermal
-	 * pressure as well as IRQ and RT-task time.
-	 */
-	c->cap = capacity_of(c->cpu);
+	/* Get the current capacity of this CPU */
+	c->cap = arch_scale_cpu_capacity(NULL, c->cpu);
 
+	/*
+	 * Account for lost capacity due to time spent in RT tasks and IRQs.
+	 * Capacity is considered lost to RT tasks even when @p is an RT task in
+	 * order to produce consistently balanced task placement results between
+	 * CFS and RT tasks when CASS selects a CPU for them.
+	 */
+	c->cap -= min(cpu_util_rt(c->cpu) + cpu_util_irq(c->cpu),
+			c->cap - 1);
 
 	/*
 	 * Deduct @current's util from this CPU if this is a sync wake, unless
