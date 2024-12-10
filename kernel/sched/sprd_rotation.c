@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0
 
 #include <linux/syscore_ops.h>
+#include <uapi/linux/sched/types.h>
 
 /* ========================= define data struct =========================== */
 struct rotation_data {
