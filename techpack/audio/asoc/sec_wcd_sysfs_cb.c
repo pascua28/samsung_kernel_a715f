@@ -35,7 +35,21 @@ static int mad_mic_bias;
 #ifndef CONFIG_SEC_SND_USB_HEADSET_ONLY
 static int get_jack_status(void)
 {
-	return 1;
+#if defined(CONFIG_SND_SOC_WCD937X)
+	struct snd_soc_codec *codec = wcd_codec;
+	struct wcd937x_mbhc *wcd937x_mbhc = wcd937x_soc_get_mbhc(codec);
+	struct wcd_mbhc *mbhc = &wcd937x_mbhc->wcd_mbhc;
+	int value = 0;
+
+	if ((mbhc->hph_status == SND_JACK_HEADSET) ||
+	    (mbhc->hph_status == SND_JACK_HEADPHONE))
+		value = 1;
+
+	dev_info(codec->dev, "%s: %d\n", __func__, value);
+
+	return value;
+#else
+	return 0;
 #endif
 }
 
@@ -57,6 +71,7 @@ static int get_key_status(void)
 	return 0;
 #endif
 }
+#endif
 
 #ifdef CONFIG_SND_SOC_WCD_DSP_MGR
 static int get_wdsp_status(void)
