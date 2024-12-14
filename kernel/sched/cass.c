@@ -124,7 +124,9 @@ static int cass_best_cpu(struct task_struct *p, int prev_cpu, bool sync, bool rt
 	 * Get the utilization for this task. Note that RT tasks don't have
 	 * per-entity load tracking.
 	 */
-	p_util = rt ? 0 : task_util_est(p);
+	p_util = clamp(rt ? 0 : task_util_est(p),
+		       uclamp_eff_value(p, UCLAMP_MIN),
+		       uclamp_eff_value(p, UCLAMP_MAX));
 
 	/*
 	 * Find the best CPU to wake @p on. Although idle_get_state() requires
