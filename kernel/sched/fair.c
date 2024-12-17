@@ -3601,9 +3601,6 @@ int update_irq_load_avg(u64 now, int cpu, struct rq *rq, int running)
 	ret = ___update_load_avg(now - running, cpu, &rq->avg_irq, 0, 0, NULL, NULL);
 	ret += ___update_load_avg(now, cpu, &rq->avg_irq, 1, 1, NULL, NULL);
 
-	if (ret)
-		___update_load_avg(now, cpu, &rq->avg_irq, 1, 1, NULL, NULL);
-
 	return ret;
 }
 
