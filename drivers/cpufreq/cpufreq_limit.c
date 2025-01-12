@@ -143,9 +143,9 @@ struct cpufreq_limit_hmp hmp_param = {
 	.big_cpu_end		= 7,
 	.little_min_freq	= 288000,	/* divided value, not real clock */
 	.little_max_freq	= 902400,	/* divided value, not real clock */
-	.big_min_freq		= 979200,
+	.big_min_freq		= 806000,
 	.big_max_freq		= 2208000,
-	.little_min_lock	= 1209600 / 2, /* SVS_L1 */
+	.little_min_lock	= 768000 / 2, /* SVS_L1 */
 
 	.little_divider 	= 2,
 	.use_hotplug_out	= false,
