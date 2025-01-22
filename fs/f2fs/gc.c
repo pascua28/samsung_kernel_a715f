@@ -316,6 +316,10 @@ static int drm_notifier_callback(struct notifier_block *self,
 
 	blank = evdata->data;
 	switch (*blank) {
+	case MSM_DRM_BLANK_LP1:
+	case MSM_DRM_BLANK_LP2:
+	case MSM_DRM_BLANK_STANDBY:
+	case MSM_DRM_BLANK_SUSPEND:
 	case MSM_DRM_BLANK_POWERDOWN:
 		if (!screen_on)
 			goto out;
